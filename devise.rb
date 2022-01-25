@@ -12,3 +12,5 @@ generate(:scaffold, 'user', 'admin:boolean')
 
 rails_command('generate devise:install')
 rails_command('generate devise User')
+
+#Test
