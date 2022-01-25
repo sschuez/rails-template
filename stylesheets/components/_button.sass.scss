@@ -1,0 +1,25 @@
+@use "../config/config.sass.scss" as *;
+
+.btn-ghost {
+  color: $links;
+  border: 1px solid $links;
+  padding: 8px 24px;
+  border-radius: 50px;
+  transition: opacity 0.3s ease;
+}
+
+.dark-mode .btn-ghost {
+  color: $links-dark;
+  border: 1px solid $links-dark;
+}
+
+.btn-ghost:hover {
+  opacity: 1;
+  font-weight: bold;
+  border: 2px solid $links;
+}
+
+.dark-mode .btn-ghost:hover {
+  border: 2px solid $links-dark;
+}
+
