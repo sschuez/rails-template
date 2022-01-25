@@ -1,5 +1,5 @@
 # Command
-# rails new --css sass \
+# rails new \
 # --database postgresql \
 # -m https://raw.githubusercontent.com/sschuez/rails-template/main/devise.rb \
 # CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
@@ -44,7 +44,7 @@ after_bundle do
   ########################################
   generate('css:install:sass')
   
-  run 'curl -L https://github.com/sschuez/rails-template/blob/main/stylesheets.zip > stylesheets.zip'
+  run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets.zip > stylesheets.zip'
   run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/stylesheets app/assets/stylesheets'
 
 
