@@ -35,9 +35,6 @@ gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'conf
 
 
 
-
-
-
 ########################################
 # AFTER BUNDLE
 ########################################
@@ -47,10 +44,8 @@ after_bundle do
   ########################################
   generate('css:install:sass')
   
-  run 'rm -rf app/assets/stylesheets'
-  run 'rm -rf vendor'
-  run 'curl -L https://github.com/lewagon/rails-stylesheets/archive/master.zip > stylesheets.zip'
-  run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-master app/assets/stylesheets'
+  run 'curl -L https://github.com/sschuez/rails-template/blob/main/stylesheets.zip > stylesheets.zip'
+  run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/stylesheets app/assets/stylesheets'
 
 
 
@@ -113,31 +108,31 @@ after_bundle do
   environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
   environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
 
-  # Webpacker / Yarn
-  ########################################
-  run 'yarn add bootstrap @popperjs/core'
-  run "rails webpacker:install:stimulus"
-  append_file 'app/javascript/packs/application.js', <<~JS
-    import "bootstrap"
-  JS
+  # # Webpacker / Yarn
+  # ########################################
+  # run 'yarn add bootstrap @popperjs/core'
+  # run "rails webpacker:install:stimulus"
+  # append_file 'app/javascript/packs/application.js', <<~JS
+  #   import "bootstrap"
+  # JS
 
-  inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
-    <<~JS
-      // Preventing Babel from transpiling NodeModules packages
-      environment.loaders.delete('nodeModules');
-    JS
-  end
+  # inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
+  #   <<~JS
+  #     // Preventing Babel from transpiling NodeModules packages
+  #     environment.loaders.delete('nodeModules');
+  #   JS
+  # end
 
-  # Dotenv
-  ########################################
-  run 'touch .env'
+  # # Dotenv
+  # ########################################
+  # run 'touch .env'
 
-  # Rubocop
-  ########################################
-  run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/.rubocop.yml > .rubocop.yml'
+  # # Rubocop
+  # ########################################
+  # run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/.rubocop.yml > .rubocop.yml'
 
   # Git
   ########################################
   git add: '.'
-  git commit: "-m 'Initial commit with devise template from https://github.com/lewagon/rails-templates'"
+  git commit: "-m 'Initial commit with devise template from Stephen's template'"
 end
