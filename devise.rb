@@ -6,17 +6,6 @@
 
 run "if uname | grep -q 'Darwin'; then pgrep spring | xargs kill -9; fi"
 
-# GEMFILE
-########################################
-# inject_into_file 'Gemfile', before: 'group :development, :test do' do
-#   <<~RUBY
-#     gem 'devise'
-#     # gem 'font-awesome-sass'
-#     gem 'simple_form'
-#     gem 'cssbundling-rails'
-#   RUBY
-# end
-
 def rails_version
   @rails_version ||= Gem::Version.new(Rails::VERSION::STRING)
 end
@@ -31,15 +20,10 @@ def add_gems
   gem 'pundit'
   gem 'jsbundling-rails'
   gem 'simple_form'
+  # gem 'pry-byebug'
+  # gem 'pry-rails'
+  # gem 'dotenv-rails'
 end
-
-# inject_into_file 'Gemfile', after: 'group :development, :test do' do
-#   <<-RUBY
-#   gem 'pry-byebug'
-#   gem 'pry-rails'
-#   # gem 'dotenv-rails'
-#   RUBY
-# end
 
 def add_users
   route "root to: 'pages#home'"
@@ -73,9 +57,6 @@ def add_users
     EOF
   end
 
-  # environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }", env: 'development'
-  # environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
-
   generate :devise, "User", "admin:boolean"
 
   # Set admin default to false
@@ -101,28 +82,32 @@ end
 #   run "yarn add local-time esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
 # end
 
+def add_bootstrap
+  rails_command "css:install:bootstrap"
+  rails_command "simple_form:install --bootstrap"
+ 
+  # generate "simple_form:install --bootstrap"
+
+  # Replace simple form initializer to work with Bootstrap 5
+  run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
+
+  run "rm app/assets/stylesheets/application.bootstrap.scss"
+end
+
 def add_sass
   rails_command "css:install:sass"
 end
 
 def copy_templates
-  # run 'rm -rf vendor'
   run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets.zip > stylesheets.zip'
   run 'rm app/assets/stylesheets/application.sass.scss'
-  run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip' #&& mv app/assets/stylesheets app/assets/stylesheets'
+  run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip'
   run 'rm -r app/assets/__MACOSX'
-end
-
-def add_simple_form
-  rails_command "simple_form:install --bootstrap"
-
-  # Replace simple form initializer to work with Bootstrap 5
-  run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
 end
 
 
 unless rails_6_or_newer?
-  puts "Please use Rails 6.0 or newer to create a Jumpstart application"
+  puts "Please use Rails 6.0 or newer to create an application with this template"
 end
 
 def controllers
@@ -166,6 +151,7 @@ def layouts
   style = <<~HTML
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   HTML
+  gsub_file('app/views/layouts/application.html.erb', '<meta name="viewport" content="width=device-width,initial-scale=1">', style)
   
   # Flashes
   file 'app/views/shared/_flashes.html.erb', <<~HTML
@@ -248,13 +234,12 @@ after_bundle do
   
   add_sass
   copy_templates
-  add_simple_form
+  add_bootstrap
   controllers
   set_environments
   layouts
   
   rails_command "active_storage:install"
-
   rails_command 'db:migrate'
   
   # Commit everything to git
