@@ -161,6 +161,8 @@ def layouts
     <%= yield %>
   </div>    
 
+  <%= render 'shared/footer' %>
+
   HTML
   gsub_file('app/views/layouts/application.html.erb', '<%= yield %>', background)
   
@@ -223,6 +225,23 @@ def layouts
     </div>
 
   HTML
+
+  # Footer
+  file 'app/views/shared/_footer.html.erb', <<~HTML
+    <div class="footer">
+      <div class="footer-links">
+        # <a href="#"><i class="fab fa-github"></i></a>
+        # <a href="#"><i class="fab fa-instagram"></i></a>
+        # <a href="#"><i class="fab fa-facebook"></i></a>
+        # <a href="#"><i class="fab fa-twitter"></i></a>
+        # <a href="#"><i class="fab fa-linkedin"></i></a>
+      </div>
+      <div class="footer-copyright">
+        This footer is made by <a href="https://www.margareti.com" target="_blank">Margareti</a>
+      </div>
+    </div>
+  HTML
+
 
   # Add to layout
   inject_into_file 'app/views/layouts/application.html.erb', after: '<body>' do
