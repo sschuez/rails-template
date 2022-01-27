@@ -1,35 +1,35 @@
 @use "../config/config.sass.scss" as *;
 
 h1 {
-  font-family: $font-family !important;
+  font-family: $font-family;
 }
 
 h2 {
-  font-family: $font-family !important;
+  font-family: $font-family;
 }
 
 h3 {
-  font-family: $font-family !important;
+  font-family: $font-family;
 }
 
 h4 {
-  font-family: $font-family !important;
+  font-family: $font-family;
 }
 
 p {
-  font-family: $font-family !important;
+  font-family: $font-family;
 }
 
 a {
-  color: $links !important;
-  text-decoration: none !important;
+  color: $links;
+  text-decoration: none;
 }
 
 body {
-  background-color: $background-color !important;
-  color: $font-color !important;
-  position: relative !important;
-  margin-top: 80px !important;
+  background-color: $background-color;
+  color: $font-color;
+  position: relative;
+  margin-top: 80px;
 }
 
 .dark-mode {
