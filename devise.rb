@@ -15,9 +15,9 @@ def rails_6_or_newer?
 end
 
 def add_gems
-  gem 'cssbundling-rails'
   gem 'devise'
   gem 'pundit'
+  gem 'cssbundling-rails'
   gem 'jsbundling-rails'
   gem 'simple_form'
   # gem 'pry-byebug'
@@ -79,12 +79,14 @@ end
 # end
 
 # def add_javascript
-#   run "yarn add local-time esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
+#   run "yarn add esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
 # end
 
 def add_bootstrap
   rails_command "css:install:bootstrap"
-  rails_command "simple_form:install --bootstrap"
+  
+  rails_command "simple_form:install"
+  # rails_command "simple_form:install --bootstrap"
  
   # generate "simple_form:install --bootstrap"
 
@@ -96,6 +98,7 @@ end
 
 def add_sass
   rails_command "css:install:sass"
+  run 'yarn build:css'
 end
 
 def copy_templates
@@ -104,7 +107,6 @@ def copy_templates
   run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip'
   run 'rm -r app/assets/__MACOSX'
 end
-
 
 unless rails_6_or_newer?
   puts "Please use Rails 6.0 or newer to create an application with this template"
@@ -152,6 +154,15 @@ def layouts
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   HTML
   gsub_file('app/views/layouts/application.html.erb', '<meta name="viewport" content="width=device-width,initial-scale=1">', style)
+  
+  background = <<~HTML
+
+  <div class="background-main">
+    <%= yield %>
+  </div>    
+
+  HTML
+  gsub_file('app/views/layouts/application.html.erb', '<%= yield %>', background)
   
   # Flashes
   file 'app/views/shared/_flashes.html.erb', <<~HTML
@@ -223,24 +234,41 @@ def layouts
   end
 end
 
+# def add_esbuild_script
+#   build_script = "node esbuild.config.js"
+
+#   if (`npx -v`.to_f < 7.1 rescue "Missing")
+#     say %(Add "scripts": { "build": "#{build_script}" } to your package.json), :green
+#   else
+#     run %(npm set-script build "#{build_script}")
+#   end
+# end
+
 # Main setup
 add_gems
 
 after_bundle do
+  git_ignore
+
   add_users
   add_authorization
+  
   # add_jsbundling
   # add_javascript
   
+  add_bootstrap
   add_sass
   copy_templates
-  add_bootstrap
+  
+  
   controllers
-  set_environments
   layouts
   
+  set_environments
+  # add_esbuild_script
+
   rails_command "active_storage:install"
-  rails_command 'db:migrate'
+  # rails_command 'db:migrate'
   
   # Commit everything to git
   unless ENV["SKIP_GIT"]
@@ -254,4 +282,9 @@ after_bundle do
     end
   end
 
+  say
+  say "Template app successfully created!", :blue
+  say
+  say "  rails db:create db:migrate"
+  say "  bin/dev"
 end
