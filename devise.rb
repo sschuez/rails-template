@@ -150,8 +150,92 @@ end
 def set_environments
   environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
   environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
+
+  gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'config.assets.debug = false')
 end
 
+def git_ignore
+  append_file '.gitignore', <<~TXT
+    # Ignore Mac and Linux file system files
+    *.swp
+    .DS_Store
+  TXT
+end
+
+def layouts
+  style = <<~HTML
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  HTML
+  
+  # Flashes
+  file 'app/views/shared/_flashes.html.erb', <<~HTML
+    <% if notice %>
+      <div class="alert alert-info alert-dismissible fade show m-1" role="alert">
+        <%= notice %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        </button>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
+        <%= alert %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        </button>
+      </div>
+    <% end %>
+  HTML
+
+  # Navbar
+  file 'app/views/shared/_navbar.html.erb', <<~HTML
+  
+    <div class="navbar navbar-expand-sm navbar-light navbar-lewagon">
+      <div class="container-fluid">
+        <%= link_to "#", class: "navbar-brand" do %>
+          <%= image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png" %>
+        <% end %>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto">
+            <% if user_signed_in? %>
+              <li class="nav-item active">
+                <%= link_to "Home", "#", class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Messages", "#", class: "nav-link" %>
+              </li>
+              <li class="nav-item dropdown">
+                <%= image_tag "https://kitt.lewagon.com/placeholder/users/sschuez", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }, 'aria-haspopup': true, 'aria-expanded': false %>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <%= link_to "Action", "#", class: "dropdown-item" %>
+                  <%= link_to "Another action", "#", class: "dropdown-item" %>
+                  <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+                </div>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  HTML
+
+  # Add to layout
+  inject_into_file 'app/views/layouts/application.html.erb', after: '<body>' do
+    <<-HTML
+  
+      <%= render 'shared/navbar' %>
+      <%= render 'shared/flashes' %>
+    HTML
+  end
+end
 
 # Main setup
 add_gems
@@ -167,6 +251,7 @@ after_bundle do
   add_simple_form
   controllers
   set_environments
+  layouts
   
   rails_command "active_storage:install"
 
@@ -185,116 +270,3 @@ after_bundle do
   end
 
 end
-
-# # Dev environment
-# ########################################
-# gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'config.assets.debug = false')
-
-
-
-
-
-
-
-# ########################################
-# # AFTER BUNDLE
-# ########################################
-# after_bundle do
-
-#   # Assets
-#   ########################################
-#   generate('css:install:sass')
-  
-#   run 'rm -rf vendor'
-#   run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets.zip > stylesheets.zip'
-#   run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/stylesheets app/assets/stylesheets'
-
-
-
-#   # Generators: db + simple form + pages controller
-#   ########################################
-#   rails_command 'db:drop db:create db:migrate'
-#   generate('simple_form:install', '--bootstrap')
-#   generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
-
-#   # Replace simple form initializer to work with Bootstrap 5
-#   run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
-
-#   # Routes
-#   ########################################
-#   route "root to: 'pages#home'"
-
-#   # Git ignore
-#   ########################################
-#   append_file '.gitignore', <<~TXT
-#     # Ignore .env file containing credentials.
-#     .env*
-#     # Ignore Mac and Linux file system files
-#     *.swp
-#     .DS_Store
-#   TXT
-
-#   # Devise install + user
-#   ########################################
-#   generate('devise:install')
-#   generate('devise', 'User')
-
-#   # App controller
-#   ########################################
-#   run 'rm app/controllers/application_controller.rb'
-#   file 'app/controllers/application_controller.rb', <<~RUBY
-#     class ApplicationController < ActionController::Base
-#     #{  "protect_from_forgery with: :exception\n" if Rails.version < "5.2"}  before_action :authenticate_user!
-#     end
-#   RUBY
-
-#   # migrate + devise views
-#   ########################################
-#   rails_command 'db:migrate'
-#   generate('devise:views')
-
-#   # Pages Controller
-#   ########################################
-#   run 'rm app/controllers/pages_controller.rb'
-#   file 'app/controllers/pages_controller.rb', <<~RUBY
-#     class PagesController < ApplicationController
-#       skip_before_action :authenticate_user!, only: [ :home ]
-
-#       def home
-#       end
-#     end
-#   RUBY
-
-#   # Environments
-#   ########################################
-#   environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
-#   environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
-
-#   # # Webpacker / Yarn
-#   # ########################################
-#   # run 'yarn add bootstrap @popperjs/core'
-#   # run "rails webpacker:install:stimulus"
-#   # append_file 'app/javascript/packs/application.js', <<~JS
-#   #   import "bootstrap"
-#   # JS
-
-#   # inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
-#   #   <<~JS
-#   #     // Preventing Babel from transpiling NodeModules packages
-#   #     environment.loaders.delete('nodeModules');
-#   #   JS
-#   # end
-
-#   # # Dotenv
-#   # ########################################
-#   # run 'touch .env'
-
-#   # # Rubocop
-#   # ########################################
-#   # run 'curl -L https://raw.githubusercontent.com/lewagon/rails-templates/master/.rubocop.yml > .rubocop.yml'
-
-#   # Git
-#   ########################################
-#   git add: '.'
-#   git commit: "-m 'Initial commit with devise template from Stephen's template'"
-# end
