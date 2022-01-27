@@ -42,8 +42,9 @@ after_bundle do
 
   # Assets
   ########################################
-  generate('css:install:sass')
+  generate('rail css:install:sass')
   
+  run 'rm -rf vendor'
   run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets.zip > stylesheets.zip'
   run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/stylesheets app/assets/stylesheets'
 
