@@ -42,9 +42,10 @@ end
 # end
 
 def add_users
-  route "root to: 'home#index'"
+  route "root to: 'pages#home'"
   generate "devise:install"
-  
+  generate "devise:views"
+
   # Configure Devise to handle TURBO_STREAM requests like HTML requests
   inject_into_file "config/initializers/devise.rb", "  config.navigational_formats = ['/', :html, :turbo_stream]", after: "Devise.setup do |config|\n"
   
@@ -72,7 +73,9 @@ def add_users
     EOF
   end
 
-  environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }", env: 'development'
+  # environment "config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }", env: 'development'
+  # environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
+
   generate :devise, "User", "admin:boolean"
 
   # Set admin default to false
@@ -90,13 +93,13 @@ def add_authorization
   generate 'pundit:install'
 end
 
-def add_jsbundling
-  rails_command "javascript:install:esbuild"
-end
+# def add_jsbundling
+#   rails_command "javascript:install:esbuild"
+# end
 
-def add_javascript
-  run "yarn add local-time esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
-end
+# def add_javascript
+#   run "yarn add local-time esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
+# end
 
 def add_sass
   rails_command "css:install:sass"
@@ -115,22 +118,40 @@ def add_simple_form
 
   # Replace simple form initializer to work with Bootstrap 5
   run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
-
 end
 
-def add_esbuild_script
-  build_script = "node esbuild.config.js"
-
-  if (`npx -v`.to_f < 7.1 rescue "Missing")
-    say %(Add "scripts": { "build": "#{build_script}" } to your package.json), :green
-  else
-    run %(npm set-script build "#{build_script}")
-  end
-end
 
 unless rails_6_or_newer?
   puts "Please use Rails 6.0 or newer to create a Jumpstart application"
 end
+
+def controllers
+  # App controller
+  run 'rm app/controllers/application_controller.rb'
+  file 'app/controllers/application_controller.rb', <<~RUBY
+    class ApplicationController < ActionController::Base
+    #{  "protect_from_forgery with: :exception\n" if Rails.version < "5.2"}  before_action :authenticate_user!
+    end
+  RUBY
+
+  # Page controller
+  generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
+  run 'rm app/controllers/pages_controller.rb'
+  file 'app/controllers/pages_controller.rb', <<~RUBY
+    class PagesController < ApplicationController
+      skip_before_action :authenticate_user!, only: [ :home ]
+
+      def home
+      end
+    end
+  RUBY
+end
+
+def set_environments
+  environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
+  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
+end
+
 
 # Main setup
 add_gems
@@ -138,15 +159,18 @@ add_gems
 after_bundle do
   add_users
   add_authorization
-  add_jsbundling
-  add_javascript
+  # add_jsbundling
+  # add_javascript
   
   add_sass
   copy_templates
   add_simple_form
-  add_esbuild_script
+  controllers
+  set_environments
   
   rails_command "active_storage:install"
+
+  rails_command 'db:migrate'
   
   # Commit everything to git
   unless ENV["SKIP_GIT"]

@@ -28,7 +28,6 @@ a {
 body {
   background-color: $background-color;
   color: $font-color;
-  text-align: center;
   position: relative;
   margin-top: 80px;
 }
@@ -73,7 +72,6 @@ body {
   .background-main {
     padding: 12px 36px 64px 36px; 
   }
-
 }
 
 /* Large devices (desktops, 992px and up) */
@@ -81,7 +79,6 @@ body {
   .background-main {
     padding: 24px 70px 64px 70px; 
   }
-  
 }
 
 /* Extra large devices (large desktops, 1200px and up) */
@@ -89,6 +86,5 @@ body {
   .background-main {
     padding: 24px 100px 64px 100px; 
   }
-  
 }
 

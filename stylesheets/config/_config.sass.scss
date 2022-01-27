@@ -1,4 +1,4 @@
-/* Variables */
+// Variables
 $toggle-switch: #d4a373;
 $toggle-switch-dark: #19328a;
 
@@ -10,9 +10,9 @@ $font-color-dark: #fefae0;
 $links: #ff8966;
 $links-dark: #ff8966;
 
-$font-family: 'Roboto', sans-serif;
-
 $card-background-dark: #27323E;
 $card-background: #faedcd;
 
-
+// Fonts
+@import 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap';
+$font-family: 'Roboto', sans-serif;
