@@ -14,11 +14,14 @@ CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 * simple_form (preconfigured with Bootstrap)
 
 # Layouts
-I added a navbar, a footer and some alerts. Fontawesome is shipped, too. You can easily add dark-mode.
+I added a navbar, a footer and some alerts. Fontawesome is configured, too (For icons).
 The whole css is done via cssbundling:sass. I have created an easy structure to organise the sass-stylesheets under your assets: 
 * components 
 * pages
 * config (for your fonts and global variables)
+
+# Dark Mode
+I implemented a basic dark mode functionality, with a shared/dark_mode button preconfigured in the navbar. If this is fully implemented, it need to be further configured and tested.
 
 # Javascript
 The Javascript is handled via importmaps, the default route of Rails 7.
