@@ -290,7 +290,7 @@ after_bundle do
   # add_esbuild_script
 
   rails_command "active_storage:install"
-  rails_command 'db:create db:migrate'
+  rails_command 'db:drop db:create db:migrate'
   run "yarn build:css"
   
   # Commit everything to git
