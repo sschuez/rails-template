@@ -94,6 +94,8 @@ def add_bootstrap
   run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
 
   run "rm app/assets/stylesheets/application.bootstrap.scss"
+
+  run "bin/importmap pin bootstrap"
 end
 
 def add_sass
@@ -152,6 +154,7 @@ end
 def layouts
   style = <<~HTML
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://kit.fontawesome.com/649ff54fcc.js" crossorigin="anonymous"></script>
   HTML
   gsub_file('app/views/layouts/application.html.erb', '<meta name="viewport" content="width=device-width,initial-scale=1">', style)
   
@@ -211,7 +214,7 @@ def layouts
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                   <%= link_to "Action", "#", class: "dropdown-item" %>
                   <%= link_to "Another action", "#", class: "dropdown-item" %>
-                  <%= link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+                  <%= link_to "Log out", destroy_user_session_path, 'data-turbo-method': :delete, class: "dropdown-item" %>
                 </div>
               </li>
             <% else %>
@@ -230,14 +233,14 @@ def layouts
   file 'app/views/shared/_footer.html.erb', <<~HTML
     <div class="footer">
       <div class="footer-links">
-        # <a href="#"><i class="fab fa-github"></i></a>
-        # <a href="#"><i class="fab fa-instagram"></i></a>
-        # <a href="#"><i class="fab fa-facebook"></i></a>
-        # <a href="#"><i class="fab fa-twitter"></i></a>
-        # <a href="#"><i class="fab fa-linkedin"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
       </div>
       <div class="footer-copyright">
-        This footer is made by <a href="https://www.margareti.com" target="_blank">Margareti</a>
+        This footer is made with <i class="fas fa-heart"></i> by <a href="https://www.margareti.com" target="_blank">Margareti</a>
       </div>
     </div>
   HTML
@@ -287,7 +290,8 @@ after_bundle do
   # add_esbuild_script
 
   rails_command "active_storage:install"
-  # rails_command 'db:migrate'
+  rails_command 'db:create db:migrate'
+  run "yarn build:css"
   
   # Commit everything to git
   unless ENV["SKIP_GIT"]
@@ -304,6 +308,7 @@ after_bundle do
   say
   say "Template app successfully created!", :blue
   say
-  say "  rails db:create db:migrate"
-  say "  bin/dev"
+  # say "You still have to run:  rails db:create db:migrate"
+  # say "And then to build the css: yarn build:css"  
+  say "To run the server, run: bin/dev"
 end
