@@ -33,16 +33,16 @@ body {
 }
 
 .dark-mode {
-  background-color: $background-color-dark;
-  color: $font-color-dark;
+  background-color: $background-color-dark !important;
+  color: $font-color-dark !important;
   
   a {
-    color: $links-dark;
+    color: $links-dark !important;
   }
 }
 
 .dark-mode a {
-  columns: red;
+  columns: red !important;
 }
 
 .hidden {
