@@ -161,6 +161,7 @@ def layouts
   
   # Initial background-main
   background = <<~HTML
+      
       <div class="background-main">
         <%= yield %>
       </div>    
@@ -265,7 +266,7 @@ def layouts
   HTML
   
   # Dark Model JS
-  file 'app/javascript/controllers/dark-controller.js', <<~JS
+  file 'app/javascript/controllers/dark_controller.js', <<~JS
     import { Controller } from "@hotwired/stimulus"
 
     export default class extends Controller {
@@ -279,8 +280,9 @@ def layouts
   # Add to layout
   inject_into_file 'app/views/layouts/application.html.erb', after: '<body>' do
   <<-HTML
-    <%= render 'shared/navbar' %>
-    <%= render 'shared/flashes' %>
+  
+  <%= render 'shared/navbar' %>
+  <%= render 'shared/flashes' %>
   HTML
   end
 end
