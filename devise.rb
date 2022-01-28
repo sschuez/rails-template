@@ -18,7 +18,7 @@ def add_gems
   gem 'devise'
   gem 'pundit'
   gem 'cssbundling-rails'
-  gem 'jsbundling-rails'
+#   gem 'jsbundling-rails'
   gem 'simple_form'
   # gem 'pry-byebug'
   # gem 'pry-rails'
