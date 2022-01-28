@@ -2,10 +2,11 @@
 
 .dark-mode-switch {
   display: flex;
-  justify-content: center;
+  // justify-content: center;
   // position: absolute;
   top: -68px;
   right: 12px;
+  margin-top: 8px;
 }
 
 .dark-mode-switch .fas {
@@ -38,7 +39,7 @@
   bottom: 0;
   -webkit-transition: .4s;
   transition: .4s;
-  background-color: $toggle-switch-dark;
+  background-color: $toggle-switch;
 }
 
 .slider:before {
@@ -54,11 +55,11 @@
 }
 
 input:checked + .slider {
-  background-color: $toggle-switch;
+  background-color: $toggle-switch-dark;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px $toggle-switch;
+  box-shadow: 0 0 1px $toggle-switch-dark;
 }
 
 input:checked + .slider:before {

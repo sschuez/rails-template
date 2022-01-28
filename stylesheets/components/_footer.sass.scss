@@ -10,6 +10,10 @@
   color: rgba(0,0,0,0.3);
   margin-top: 150px;
 }
+
+.dark-mode .footer {
+  background-color: $footer-dark;
+}
 .footer-links {
   display: flex;
   align-items: center;
@@ -35,4 +39,8 @@
 }
 .footer-copyright a:hover {
   opacity: 1;
+}
+
+.dark-mode .footer-copyright {
+  color: $font-color-dark;
 }

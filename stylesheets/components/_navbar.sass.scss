@@ -5,10 +5,27 @@
   background: white;
 }
 
+.dark-mode .navbar-lewagon {
+  background-color: $background-color-dark;
+}
+
 .navbar-lewagon .navbar-collapse {
   flex-grow: 0;
 }
 
+.dark-mode .navbar-collapse {
+  background: $background-color-dark;
+}
+
 .navbar-lewagon .navbar-brand img {
   width: 40px;
+}
+
+.dark-mode .dropdown-menu {
+  background-color: $background-color-dark !important;
+  border: 1px solid rgba($font-color-dark, 0.15)
+}
+
+.dark-mode .dropdown-item:hover {
+  background-color: $toggle-switch-dark;
 }

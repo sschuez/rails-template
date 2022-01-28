@@ -152,20 +152,19 @@ def git_ignore
 end
 
 def layouts
+  # Meta
   style = <<~HTML
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <script src="https://kit.fontawesome.com/649ff54fcc.js" crossorigin="anonymous"></script>
   HTML
   gsub_file('app/views/layouts/application.html.erb', '<meta name="viewport" content="width=device-width,initial-scale=1">', style)
   
+  # Initial background-main
   background = <<~HTML
-
-  <div class="background-main">
-    <%= yield %>
-  </div>    
-
-  <%= render 'shared/footer' %>
-
+      <div class="background-main">
+        <%= yield %>
+      </div>    
+      <%= render 'shared/footer' %>
   HTML
   gsub_file('app/views/layouts/application.html.erb', '<%= yield %>', background)
   
@@ -217,9 +216,15 @@ def layouts
                   <%= link_to "Log out", destroy_user_session_path, 'data-turbo-method': :delete, class: "dropdown-item" %>
                 </div>
               </li>
+              <li class="nav-item">
+                <%= render "shared/dark_mode" %>
+              </li>
             <% else %>
               <li class="nav-item">
                 <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= render "shared/dark_mode" %>
               </li>
             <% end %>
           </ul>
@@ -245,14 +250,38 @@ def layouts
     </div>
   HTML
 
+  # Dark Mode HTML
+  file 'app/views/shared/_dark_mode.html.erb', <<~HTML
+    <div class="dark-mode-switch" data-controller="dark">
+      <!-- <i class="fas fa-moon"></i> -->
+      <div class="fas">🌞</div>
+      <label class="switch">
+        <input type="checkbox" data-action="click->dark#darkMode">
+        <span class="slider round"></span>
+      </label>
+      <div class="fas">🌘</div>
+      <!-- <i class="fas fa-sun"></i> -->
+    </div>
+  HTML
+  
+  # Dark Model JS
+  file 'app/javascript/controllers/dark-controller.js', <<~JS
+    import { Controller } from "@hotwired/stimulus"
+
+    export default class extends Controller {
+      darkMode() {
+        var element = document.body
+        element.classList.toggle("dark-mode")
+      }
+    }
+  JS
 
   # Add to layout
   inject_into_file 'app/views/layouts/application.html.erb', after: '<body>' do
-    <<-HTML
-  
-      <%= render 'shared/navbar' %>
-      <%= render 'shared/flashes' %>
-    HTML
+  <<-HTML
+    <%= render 'shared/navbar' %>
+    <%= render 'shared/flashes' %>
+  HTML
   end
 end
 
