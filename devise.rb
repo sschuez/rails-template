@@ -253,16 +253,11 @@ def layouts
 
   # Dark Mode HTML
   file 'app/views/shared/_dark_mode.html.erb', <<~HTML
-    <div class="dark-mode-switch" data-controller="dark">
-      <!-- <i class="fas fa-moon"></i> -->
-      <div class="fas">🌞</div>
-      <label class="switch">
-        <input type="checkbox" data-action="click->dark#darkMode">
-        <span class="slider round"></span>
-      </label>
-      <div class="fas">🌘</div>
-      <!-- <i class="fas fa-sun"></i> -->
+  <div class="dark-mode-switch" data-controller="dark">
+    <div class=dark-mode-btn data-action="click->dark#darkMode">
     </div>
+  </div>
+
   HTML
   
   # Dark Model JS
@@ -270,21 +265,14 @@ def layouts
   import { Controller } from "@hotwired/stimulus"
 
   export default class extends Controller {
-    darkMode() {
-      var element = document.body
-      element.classList.toggle("dark-mode")
-    
-      // Cookies toggle
-      let currentTheme = element.classList.contains("dark-mode") ? "dark-mode" : "light-mode"
-      if (currentTheme == "dark-mode") {
-        document.body.classList.remove("light-mode")
-        document.cookie = "theme=dark-mode"
+    connect() {
+      var theme = getCookie("theme")
+      if (theme == "light-mode") {
+        document.querySelector(".dark-mode-btn").innerHTML = "🌘"
       } else {
-        document.cookie = "theme=light-mode"
+        document.querySelector(".dark-mode-btn").innerHTML = "🌞"
       }
-      // let theme = getCookie("theme")
-      // console.log(theme);
-  
+
       // Get cookie - for reference only (cosole.log())
       function getCookie(cname) {
         let name = cname + "=";
@@ -302,8 +290,23 @@ def layouts
       }
 
     }
+  
+    darkMode() {
+      var element = document.body
+      element.classList.toggle("dark-mode")
+  
+      // Cookies toggle
+      let currentTheme = element.classList.contains("dark-mode") ? "dark-mode" : "light-mode"
+      if (currentTheme == "dark-mode") {
+        document.body.classList.remove("light-mode")
+        document.querySelector(".dark-mode-btn").innerHTML = "🌞"
+        document.cookie = "theme=dark-mode"
+      } else {
+        document.cookie = "theme=light-mode"
+        document.querySelector(".dark-mode-btn").innerHTML = "🌘"
+      }
+    }
   }
-
   JS
 
   # Add to layout
