@@ -159,9 +159,6 @@ def layouts
   HTML
   gsub_file('app/views/layouts/application.html.erb', '<meta name="viewport" content="width=device-width,initial-scale=1">', style)
 
-  # Add dark-mode to body
-  gsub_file('app/views/layouts/application.html.erb', '<body>', '<body class="<%= cookies[:theme] %>">')
-
   # Initial background-main
   background = <<~HTML
       
@@ -317,6 +314,10 @@ def layouts
   <%= render 'shared/flashes' %>
   HTML
   end
+
+  # Add dark-mode to body -> needs to be at the end!
+  gsub_file('app/views/layouts/application.html.erb', '<body>', '<body class="<%= cookies[:theme] %>">')
+
 end
 
 # def add_esbuild_script
