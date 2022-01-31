@@ -158,7 +158,10 @@ def layouts
   <script src="https://kit.fontawesome.com/649ff54fcc.js" crossorigin="anonymous"></script>
   HTML
   gsub_file('app/views/layouts/application.html.erb', '<meta name="viewport" content="width=device-width,initial-scale=1">', style)
-  
+
+  # Add dark-mode to body
+  gsub_file('app/views/layouts/application.html.erb', '<body>', '<body class="<%= cookies[:theme] %>">')
+
   # Initial background-main
   background = <<~HTML
       
@@ -267,14 +270,43 @@ def layouts
   
   # Dark Model JS
   file 'app/javascript/controllers/dark_controller.js', <<~JS
-    import { Controller } from "@hotwired/stimulus"
+  import { Controller } from "@hotwired/stimulus"
 
-    export default class extends Controller {
-      darkMode() {
-        var element = document.body
-        element.classList.toggle("dark-mode")
+  export default class extends Controller {
+    darkMode() {
+      var element = document.body
+      element.classList.toggle("dark-mode")
+    
+      // Cookies toggle
+      let currentTheme = element.classList.contains("dark-mode") ? "dark-mode" : "light-mode"
+      if (currentTheme == "dark-mode") {
+        document.body.classList.remove("light-mode")
+        document.cookie = "theme=dark-mode"
+      } else {
+        document.cookie = "theme=light-mode"
       }
+      // let theme = getCookie("theme")
+      // console.log(theme);
+  
+      // Get cookie - for reference only (cosole.log())
+      function getCookie(cname) {
+        let name = cname + "=";
+        let ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+
     }
+  }
+
   JS
 
   # Add to layout
