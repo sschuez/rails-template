@@ -101,7 +101,7 @@ def copy_templates
   run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets.zip > stylesheets.zip'
   run 'rm app/assets/stylesheets/application.sass.scss'
   run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip'
-  run 'rm -r app/assets/__MACOSX'
+  # run 'rm -r app/assets/__MACOSX'
 end
 
 unless rails_6_or_newer?
