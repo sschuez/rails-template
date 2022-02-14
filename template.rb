@@ -1,7 +1,7 @@
 # Command
 # rails new \
 # --database postgresql \
-# -m https://raw.githubusercontent.com/sschuez/rails-template/main/devise.rb \
+# -m https://raw.githubusercontent.com/sschuez/rails-template/main/template.rb \
 # CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 
 run "if uname | grep -q 'Darwin'; then pgrep spring | xargs kill -9; fi"
@@ -20,9 +20,6 @@ def add_gems
   gem 'cssbundling-rails'
 #   gem 'jsbundling-rails'
   gem 'simple_form'
-  # gem 'pry-byebug'
-  # gem 'pry-rails'
-  # gem 'dotenv-rails'
 end
 
 def add_users
@@ -84,23 +81,20 @@ end
 
 def add_bootstrap
   rails_command "css:install:bootstrap"
-  
-  rails_command "simple_form:install"
-  # rails_command "simple_form:install --bootstrap"
- 
-  # generate "simple_form:install --bootstrap"
-
-  # Replace simple form initializer to work with Bootstrap 5
-  run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
-
   run "rm app/assets/stylesheets/application.bootstrap.scss"
-
   run "bin/importmap pin bootstrap"
 end
 
 def add_sass
   rails_command "css:install:sass"
   run 'yarn build:css'
+end
+
+def add_simple_form
+  rails_command "simple_form:install --bootstrap" 
+  
+  # Replace simple form initializer to work with Bootstrap 5
+  run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
 end
 
 def copy_templates
@@ -193,8 +187,8 @@ def layouts
     <div class="navbar navbar-expand-sm navbar-light navbar-lewagon">
       <div class="container-fluid">
         <%= link_to "#", class: "navbar-brand" do %>
-          <%= image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png" %>
-        <% end %>
+          <h4>Logo</h4>
+        <% end %> 
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -323,16 +317,6 @@ def layouts
 
 end
 
-# def add_esbuild_script
-#   build_script = "node esbuild.config.js"
-
-#   if (`npx -v`.to_f < 7.1 rescue "Missing")
-#     say %(Add "scripts": { "build": "#{build_script}" } to your package.json), :green
-#   else
-#     run %(npm set-script build "#{build_script}")
-#   end
-# end
-
 # Main setup
 add_gems
 
@@ -347,6 +331,7 @@ after_bundle do
   
   add_bootstrap
   add_sass
+  add_simple_form
   copy_templates
   
   
@@ -354,9 +339,7 @@ after_bundle do
   layouts
   
   set_environments
-  # add_esbuild_script
 
-  rails_command "active_storage:install"
   rails_command 'db:drop db:create db:migrate'
   run "yarn build:css"
   

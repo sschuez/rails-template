@@ -1,33 +1,6 @@
 @use "../config/config.sass.scss" as *;
 
-h1 {
-  font-family: $font-family;
-}
-
-h2 {
-  font-family: $font-family;
-}
-
-h3 {
-  font-family: $font-family;
-}
-
-h4 {
-  font-family: $font-family;
-}
-
-p {
-  font-family: $font-family;
-}
-
-a {
-  color: $links;
-  text-decoration: none;
-}
-
 body {
-  background-color: $background-color;
-  color: $font-color;
   position: relative;
   margin-top: 80px;
 }
@@ -41,10 +14,6 @@ body {
   }
 }
 
-.dark-mode a {
-  columns: red !important;
-}
-
 .hidden {
   display: none;
 }
@@ -56,7 +25,6 @@ body {
   .background-main {
     padding: 12px 12px 64px 12px; 
   }
-  
 }
 
 /* Small devices (landscape phones, 576px and up) */
