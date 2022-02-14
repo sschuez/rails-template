@@ -21,7 +21,7 @@ The whole css is done via cssbundling:sass. I have created an easy structure to 
 * config (for your fonts and global variables)
 
 # Dark Mode
-I implemented a basic dark mode functionality, with a shared/dark_mode button preconfigured in the navbar. If this is fully implemented, it need to be further configured and tested.
+I implemented a basic dark mode functionality, with a shared/dark_mode button preconfigured in the navbar. CSS class is stored in cookies via stimulus controller.
 
 # Javascript
 The Javascript is handled via importmaps, the default route of Rails 7.
