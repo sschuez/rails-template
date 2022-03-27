@@ -109,7 +109,7 @@ end
 
 
 def add_simple_form
-  generate "simple_form:install" 
+  generate "simple_form:install --bootstrap" 
   
   # Replace simple form initializer to work with Bootstrap 5
   run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
