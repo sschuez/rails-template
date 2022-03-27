@@ -90,8 +90,12 @@ def add_dartsass_rails
   # rails_command "./bin/bundle add dartsass-rails"
   rails_command "./bin/rails dartsass:install"  
   run "rm app/assets/stylesheets/application.css"
-  gsub_file('app/assets/stylesheets/application.scss', '// Sassy', '@use "components/index_components";\n@use "pages/index_pages";\n\n// External libraries\n@import "bootstrap";\n@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
-  
+  gsub_file('app/assets/stylesheets/application.scss', '// Sassy', '@use "components/index_components";
+@use "pages/index_pages";
+
+// External libraries
+@import "bootstrap";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
 end
 
 def add_bootstrap
