@@ -95,11 +95,14 @@ def add_bootstrap
   # rails_command "css:install:bootstrap"
   # run "rm app/assets/stylesheets/application.bootstrap.scss"
   run "bin/importmap pin bootstrap"
-  inject_into_file 'app/javascript/application.js', after: 'import "controllers"\n' do
-    <<-JS
-    import "bootstrap"
-    JS
-    end
+  gsub_file('app/javascript/application.js', 'import "controllers"', 'import "controllers"
+  import "bootstrap"')
+  
+  # inject_into_file 'app/javascript/application.js', after: 'import "controllers"\n' do
+  #   <<-JS
+  #   import "bootstrap"
+  #   JS
+  #   end
 end
 
 
