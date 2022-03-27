@@ -27,7 +27,7 @@ end
 def add_users
   route "root to: 'pages#home'"
   generate "devise:install"
-  generate "devise:views"
+  # generate "devise:views"
 
   # Configure Devise to handle TURBO_STREAM requests like HTML requests
   inject_into_file "config/initializers/devise.rb", "  config.navigational_formats = ['/', :html, :turbo_stream]", after: "Devise.setup do |config|\n"
@@ -109,7 +109,7 @@ end
 
 
 def add_simple_form
-  rails_command "simple_form:install --bootstrap" 
+  generate "simple_form:install --bootstrap" 
   
   # Replace simple form initializer to work with Bootstrap 5
   run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
