@@ -96,7 +96,7 @@ def add_bootstrap
   # run "rm app/assets/stylesheets/application.bootstrap.scss"
   run "bin/importmap pin bootstrap"
   gsub_file('app/javascript/application.js', 'import "controllers"', 'import "controllers"
-  import "bootstrap"')
+import "bootstrap"')
   
   # inject_into_file 'app/javascript/application.js', after: 'import "controllers"\n' do
   #   <<-JS

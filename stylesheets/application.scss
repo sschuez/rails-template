@@ -1,6 +1,6 @@
 // Entry point for your Sass build
-@use "components/index";
-@use "pages/index";
+@use "components/index_pages";
+@use "pages/index_components";
 
 // External libraries
 @import 'bootstrap';
