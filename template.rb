@@ -27,7 +27,7 @@ end
 def add_users
   route "root to: 'pages#home'"
   generate "devise:install"
-  # generate "devise:views"
+  generate "devise:views"
 
   # Configure Devise to handle TURBO_STREAM requests like HTML requests
   inject_into_file "config/initializers/devise.rb", "  config.navigational_formats = ['/', :html, :turbo_stream]", after: "Devise.setup do |config|\n"
@@ -90,14 +90,12 @@ def add_dartsass_rails
   # rails_command "./bin/bundle add dartsass-rails"
   rails_command "./bin/rails dartsass:install"  
   run "rm app/assets/stylesheets/application.css"
-  gsub_file('app/assets/stylesheets/application.scss', '// Sassy', '
-    @use "components/index_components";
-    @use "pages/index_pages";
-    
-    // External libraries
-    @import "bootstrap";
-    @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
-    ')
+  gsub_file('app/assets/stylesheets/application.scss', '// Sassy', '@use "components/index_components";
+  @use "pages/index_pages";
+  
+  // External libraries
+  @import "bootstrap";
+  @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
   
 end
 
@@ -107,12 +105,6 @@ def add_bootstrap
   run "bin/importmap pin bootstrap"
   gsub_file('app/javascript/application.js', 'import "controllers"', 'import "controllers"
 import "bootstrap"')
-  
-  # inject_into_file 'app/javascript/application.js', after: 'import "controllers"\n' do
-  #   <<-JS
-  #   import "bootstrap"
-  #   JS
-  #   end
 end
 
 
@@ -125,7 +117,6 @@ end
 
 def copy_templates
   run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets.zip > stylesheets.zip'
-  # run 'rm app/assets/stylesheets/application.scss'
   run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip'
   # run 'rm -r app/assets/__MACOSX'
 end
