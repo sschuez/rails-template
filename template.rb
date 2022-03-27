@@ -17,8 +17,8 @@ end
 def add_gems
   gem 'devise'
   gem 'pundit'
-  # gem "dartsass-rails"
-  gem 'cssbundling-rails'
+  gem "dartsass-rails"
+  # gem 'cssbundling-rails'
 #   gem 'jsbundling-rails'
   gem 'simple_form'
 end
@@ -26,7 +26,7 @@ end
 def add_users
   route "root to: 'pages#home'"
   generate "devise:install"
-  generate "devise:views"
+  # generate "devise:views"
 
   # Configure Devise to handle TURBO_STREAM requests like HTML requests
   inject_into_file "config/initializers/devise.rb", "  config.navigational_formats = ['/', :html, :turbo_stream]", after: "Devise.setup do |config|\n"
@@ -80,16 +80,24 @@ end
 #   run "yarn add esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
 # end
 
-def add_bootstrap
-  rails_command "css:install:bootstrap"
-  run "rm app/assets/stylesheets/application.bootstrap.scss"
-  run "bin/importmap pin bootstrap"
+# def add_sass
+#   rails_command "css:install:sass"
+#   run 'yarn build:css'
+# end
+
+def add_dartsass_rails
+  rails_command "./bin/bundle add dartsass-rails"
+  rails_command "./bin/rails dartsass:install"  
+  run "rm app/assets/stylesheets/application.css"
 end
 
-def add_sass
-  rails_command "css:install:sass"
-  run 'yarn build:css'
+def add_bootstrap
+  # rails_command "css:install:bootstrap"
+  # run "rm app/assets/stylesheets/application.bootstrap.scss"
+  run "bin/importmap pin bootstrap"
+  inject_into_file "app/javascript/application.js", "import "bootstrap"", after: "import "controllers"\n"
 end
+
 
 def add_simple_form
   rails_command "simple_form:install --bootstrap" 
@@ -100,7 +108,7 @@ end
 
 def copy_templates
   run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets.zip > stylesheets.zip'
-  run 'rm app/assets/stylesheets/application.sass.scss'
+  run 'rm app/assets/stylesheets/application.scss'
   run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip'
   # run 'rm -r app/assets/__MACOSX'
 end
@@ -157,7 +165,7 @@ def layouts
   # Initial background-main
   background = <<~HTML
       
-      <div class="background-main">
+      <div class="container">
         <%= yield %>
       </div>    
       <%= render 'shared/footer' %>
@@ -329,9 +337,9 @@ after_bundle do
   
   # add_jsbundling
   # add_javascript
-  
+  add_dartsass_rails
   add_bootstrap
-  add_sass
+  # add_sass
   add_simple_form
   copy_templates
   
