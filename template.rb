@@ -18,6 +18,7 @@ def add_gems
   gem 'devise'
   gem 'pundit'
   gem "dartsass-rails"
+  gme "bootstrap"
   # gem 'cssbundling-rails'
 #   gem 'jsbundling-rails'
   gem 'simple_form'
