@@ -95,7 +95,11 @@ def add_bootstrap
   # rails_command "css:install:bootstrap"
   # run "rm app/assets/stylesheets/application.bootstrap.scss"
   run "bin/importmap pin bootstrap"
-  inject_into_file "app/javascript/application.js", "import "bootstrap"", after: "import "controllers"\n"
+  inject_into_file 'app/javascript/application.js', after: 'controllers' do
+    <<-JS
+    import "bootstrap"
+    JS
+    end
 end
 
 
@@ -350,7 +354,7 @@ after_bundle do
   set_environments
 
   rails_command 'db:drop db:create db:migrate'
-  run "yarn build:css"
+  # run "yarn build:css"
   
   # Commit everything to git
   unless ENV["SKIP_GIT"]
