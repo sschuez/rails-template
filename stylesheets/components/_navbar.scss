@@ -1,4 +1,4 @@
-@use "../config/config.sass.scss" as *;
+@use "config/variables" as *;
 
 .navbar-lewagon {
   justify-content: space-between;
@@ -27,5 +27,5 @@
 }
 
 .dark-mode .dropdown-item:hover {
-  background-color: $toggle-switch-dark;
+  background-color: $background-color-dark-secondary;
 }

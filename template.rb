@@ -1,7 +1,7 @@
 # Command
 # rails new \
 # --database postgresql \
-# -m https://raw.githubusercontent.com/sschuez/rails-template/main/devise.rb \
+# -m https://raw.githubusercontent.com/sschuez/rails-template/main/template.rb \
 # CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 
 run "if uname | grep -q 'Darwin'; then pgrep spring | xargs kill -9; fi"
@@ -17,12 +17,11 @@ end
 def add_gems
   gem 'devise'
   gem 'pundit'
-  gem 'cssbundling-rails'
+  gem "dartsass-rails"
+  gem "bootstrap"
+  # gem 'cssbundling-rails'
 #   gem 'jsbundling-rails'
   gem 'simple_form'
-  # gem 'pry-byebug'
-  # gem 'pry-rails'
-  # gem 'dotenv-rails'
 end
 
 def add_users
@@ -82,32 +81,43 @@ end
 #   run "yarn add esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
 # end
 
-def add_bootstrap
-  rails_command "css:install:bootstrap"
-  
-  rails_command "simple_form:install"
-  # rails_command "simple_form:install --bootstrap"
- 
-  # generate "simple_form:install --bootstrap"
+# def add_sass
+#   rails_command "css:install:sass"
+#   run 'yarn build:css'
+# end
 
-  # Replace simple form initializer to work with Bootstrap 5
-  run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
+def add_dartsass_rails
+  # rails_command "./bin/bundle add dartsass-rails"
+  rails_command "./bin/rails dartsass:install"  
+  run "rm app/assets/stylesheets/application.css"
+  gsub_file('app/assets/stylesheets/application.scss', '// Sassy', '@use "components/index_components";
+@use "pages/index_pages";
 
-  run "rm app/assets/stylesheets/application.bootstrap.scss"
-
-  run "bin/importmap pin bootstrap"
+// External libraries
+@import "bootstrap";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
 end
 
-def add_sass
-  rails_command "css:install:sass"
-  run 'yarn build:css'
+def add_bootstrap
+  # rails_command "css:install:bootstrap"
+  # run "rm app/assets/stylesheets/application.bootstrap.scss"
+  run "bin/importmap pin bootstrap"
+  gsub_file('app/javascript/application.js', 'import "controllers"', 'import "controllers"
+import "bootstrap"')
+end
+
+
+def add_simple_form
+  generate "simple_form:install --bootstrap" 
+  
+  # Replace simple form initializer to work with Bootstrap 5
+  run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
 end
 
 def copy_templates
   run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets.zip > stylesheets.zip'
-  run 'rm app/assets/stylesheets/application.sass.scss'
   run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip'
-  run 'rm -r app/assets/__MACOSX'
+  # run 'rm -r app/assets/__MACOSX'
 end
 
 unless rails_6_or_newer?
@@ -162,7 +172,7 @@ def layouts
   # Initial background-main
   background = <<~HTML
       
-      <div class="background-main">
+      <div class="container">
         <%= yield %>
       </div>    
       <%= render 'shared/footer' %>
@@ -193,8 +203,8 @@ def layouts
     <div class="navbar navbar-expand-sm navbar-light navbar-lewagon">
       <div class="container-fluid">
         <%= link_to "#", class: "navbar-brand" do %>
-          <%= image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png" %>
-        <% end %>
+          <h4>Logo</h4>
+        <% end %> 
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -323,16 +333,6 @@ def layouts
 
 end
 
-# def add_esbuild_script
-#   build_script = "node esbuild.config.js"
-
-#   if (`npx -v`.to_f < 7.1 rescue "Missing")
-#     say %(Add "scripts": { "build": "#{build_script}" } to your package.json), :green
-#   else
-#     run %(npm set-script build "#{build_script}")
-#   end
-# end
-
 # Main setup
 add_gems
 
@@ -344,9 +344,10 @@ after_bundle do
   
   # add_jsbundling
   # add_javascript
-  
+  add_dartsass_rails
   add_bootstrap
-  add_sass
+  # add_sass
+  add_simple_form
   copy_templates
   
   
@@ -354,11 +355,9 @@ after_bundle do
   layouts
   
   set_environments
-  # add_esbuild_script
 
-  rails_command "active_storage:install"
   rails_command 'db:drop db:create db:migrate'
-  run "yarn build:css"
+  # run "yarn build:css"
   
   # Commit everything to git
   unless ENV["SKIP_GIT"]
