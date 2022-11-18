@@ -1,6 +1,6 @@
 @use "mixins/media" as *;
 
-.header {
+.my-header {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-s);

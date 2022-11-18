@@ -226,22 +226,22 @@ def layouts
 
   # Navbar
   file 'app/views/shared/_navbar.html.erb', <<~HTML
-  <header class="navbar">
-    <div class="navbar__brand">
+  <header class="my-navbar">
+    <div class="my-navbar__brand">
       LOGO
     </div>
     <% if user_signed_in? %>
-      <div class="navbar__name">
+      <div class="my-navbar__name">
         <%= current_user.email %>
       </div>
       <%= button_to "Sign out",
                     destroy_user_session_path,
                     method: :delete,
-                    class: "btn btn-secondary" %>
+                    class: "my-btn my-btn--secondary" %>
     <% else %>
       <%= link_to "Sign in",
                   new_user_session_path,
-                  class: "btn btn-secondary navbar__right" %>
+                  class: "my-btn my-btn--secondary my-navbar__right" %>
     <% end %>
   </header>
 
