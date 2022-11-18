@@ -7,6 +7,17 @@ rails new \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
 
+or
+
+```bash
+rails new \
+--css=sass \
+--database postgresql \
+-m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bem.rb \
+CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
+```
+
+
 # Gems that are installed and configured:
 * devise (Authetication)
 * pundit (Authorisation)
