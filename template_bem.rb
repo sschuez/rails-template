@@ -125,6 +125,9 @@ end
 def copy_templates
   run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets_bem.zip > stylesheets.zip'
   run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip'
+  run 'mv app/assets/stylesheets/application.scss app/assets/stylesheets_bem'
+  run 'rm -r app/assets/stylesheets'
+  run 'mv app/assets/stylesheets_bem app/assets/stylesheets'
   # run 'rm -r app/assets/__MACOSX'
 end
 
