@@ -91,7 +91,7 @@ def add_dartsass_rails
     // Components
     @use "components/error_message";
     @use "components/flash";
-    @user "components/footer";
+    @use "components/footer";
     @use "components/navbar";
     @use "components/turbo_progress_bar";
     @use "components/visually_hidden";
