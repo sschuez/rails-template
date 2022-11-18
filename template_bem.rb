@@ -206,6 +206,7 @@ def layouts
   # Initial background-main
   background = <<~HTML
       <%= yield %>
+        
       <%= render 'shared/footer' %>
   HTML
   gsub_file('app/views/layouts/application.html.erb', '<%= yield %>', background)
@@ -216,8 +217,7 @@ def layouts
       <div
         class="flash__message"
         data-controller="removals"
-        data-action="animationend->removals#remove"
-      >
+        data-action="animationend->removals#remove">
         <%= message %>
       </div>
     <% end %>
