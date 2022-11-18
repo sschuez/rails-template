@@ -227,10 +227,10 @@ def layouts
   # Navbar
   file 'app/views/shared/_navbar.html.erb', <<~HTML
   <header class="navbar">
+    <div class="navbar__brand">
+      LOGO
+    </div>
     <% if user_signed_in? %>
-      <div class="navbar__brand">
-        LOGO
-      </div>
       <div class="navbar__name">
         <%= current_user.email %>
       </div>
@@ -276,7 +276,7 @@ def layouts
   <<-HTML
   
     <%= render 'shared/navbar' %>
-    
+
     <div id="flash" class="flash">
       <%= render "shared/flash" %>
     </div>
