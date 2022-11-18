@@ -85,7 +85,6 @@ def add_dartsass_rails
 
 // Configuration
 @use "config/variables";
-@use "config/reset";
 @use "config/animations";
 
 // Components
@@ -124,11 +123,11 @@ def add_simple_form
 end
 
 def copy_templates
-  run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets_bem.zip > stylesheets.zip'
+  run 'curl -L https://github.com/sschuez/rails-template/raw/main/stylesheets_bootstrap.zip > stylesheets.zip'
   run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip'
-  run 'mv app/assets/stylesheets/application.scss app/assets/stylesheets_bem'
+  run 'mv app/assets/stylesheets/application.scss app/assets/stylesheets_bootstrap'
   run 'rm -r app/assets/stylesheets'
-  run 'mv app/assets/stylesheets_bem app/assets/stylesheets'
+  run 'mv app/assets/stylesheets_bootstrap app/assets/stylesheets'
   # run 'rm -r app/assets/__MACOSX'
 end
 
@@ -226,34 +225,44 @@ def layouts
 
   # Navbar
   file 'app/views/shared/_navbar.html.erb', <<~HTML
-  <header class="navbar">
-    <div class="navbar__brand">
-      LOGO
+  
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li>
+      </ul>
     </div>
-    <% if user_signed_in? %>
-      <div class="navbar__name">
-        <%= current_user.email %>
-      </div>
-      <%= button_to "Sign out",
-                    destroy_user_session_path,
-                    method: :delete,
-                    class: "btn btn--secondary" %>
-    <% else %>
-      <%= link_to "Sign in",
-                  new_user_session_path,
-                  class: "btn btn--secondary navbar__right" %>
-    <% end %>
-  </header>
+  </nav>
 
   HTML
 
   # Footer
   file 'app/views/shared/_footer.html.erb', <<~HTML
   <div class="footer">
-    <div class="footer__links">
+    <div class="footer-links">
+      <a href="#"><i class="fab fa-github"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-linkedin"></i></a>
     </div>
-    <div class="footer__copyright">
-      Made with <i class="fas fa-heart"></i> by <a href="https://www.margareti.com" target="_blank">Margareti</a>
+    <div class="footer-copyright">
+      This footer is made with <i class="fas fa-heart"></i> by <a href="https://www.margareti.com" target="_blank">Margareti</a>
     </div>
   </div>
 
