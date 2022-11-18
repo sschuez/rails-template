@@ -1,46 +1,45 @@
-@use "config/variables" as *;
-
 .footer {
-  background: #F4F4F4;
+  background: (var(--color-light));
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 100px;
   padding: 0px 50px;
-  color: rgba(0,0,0,0.3);
+  color: (var(--color-text-muted));
   margin-top: 150px;
-}
 
-.dark-mode .footer {
-  background-color: $footer-dark;
-}
-.footer-links {
-  display: flex;
-  align-items: center;
-}
-.footer-links a {
-  color: black;
-  opacity: 0.15;
-  text-decoration: none;
-  font-size: 24px;
-  padding: 0px 10px;
-}
-.footer-links a:hover {
-  opacity: 1;
-}
-.footer .fa-heart {
-  color: #D23333;
-}
+  .fa-heart {
+    color: var(--color-primary-rotate);
+  }
 
-.footer-copyright a {
-  color: black;
-  opacity: 0.15;
-  text-decoration: none;
-}
-.footer-copyright a:hover {
-  opacity: 1;
-}
+  &__links {
+    display: flex;
+    align-items: center;
+    
+    a {
+      color: black;
+      opacity: 0.15;
+      text-decoration: none;
+      font-size: 24px;
+      padding: 0px 10px;
+    
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
 
-.dark-mode .footer-copyright {
-  color: $font-color-dark;
+  &__copyright {
+
+    a {
+      color: black;
+      opacity: 0.15;
+      text-decoration: none;
+    
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+  
 }

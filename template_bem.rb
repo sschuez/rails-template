@@ -19,8 +19,6 @@ def add_gems
   gem 'pundit'
   gem "dartsass-rails"
   gem "bootstrap"
-  # gem 'cssbundling-rails'
-#   gem 'jsbundling-rails'
   gem 'simple_form'
 end
 
@@ -73,14 +71,6 @@ def add_authorization
   generate 'pundit:install'
 end
 
-# def add_jsbundling
-#   rails_command "javascript:install:esbuild"
-# end
-
-# def add_javascript
-#   run "yarn add esbuild-rails trix @hotwired/stimulus @hotwired/turbo-rails @rails/activestorage @rails/ujs @rails/request.js"
-# end
-
 def add_sass
   rails_command "css:install:sass"
   run 'yarn build:css'
@@ -100,10 +90,11 @@ def add_dartsass_rails
     
     // Components
     @use "components/error_message";
-    @use "components/visually_hidden";
-    @use "components/turbo_progress_bar";
-    @use "components/navbar";
     @use "components/flash";
+    @user "components/footer";
+    @use "components/navbar";
+    @use "components/turbo_progress_bar";
+    @use "components/visually_hidden";
     
     // Layouts
     @use "layouts/container";
@@ -118,8 +109,6 @@ def add_dartsass_rails
 end
 
 def add_bootstrap
-  # rails_command "css:install:bootstrap"
-  # run "rm app/assets/stylesheets/application.bootstrap.scss"
   run "bin/importmap pin bootstrap"
   gsub_file('app/javascript/application.js', 'import "controllers"', 'import "controllers"
 import "bootstrap"')
@@ -154,7 +143,7 @@ def controllers
 
   # ApplicationHelper
   run 'rm app/helpers/application_helper.rb'
-  file 'app/controllers/application_helper.rb', <<~RUBY
+  file 'app/helpers/application_helper.rb', <<~RUBY
     module ApplicationHelper
       def render_turbo_stream_flash_messages
         turbo_stream.prepend "flash", partial: "shared/flash"
@@ -213,9 +202,7 @@ def layouts
   # Initial background-main
   background = <<~HTML
       
-      <div class="container">
-        <%= yield %>
-      </div>    
+      <%= yield %>
       <%= render 'shared/footer' %>
   HTML
   gsub_file('app/views/layouts/application.html.erb', '<%= yield %>', background)
@@ -249,11 +236,11 @@ def layouts
       <%= button_to "Sign out",
                     destroy_user_session_path,
                     method: :delete,
-                    class: "btn btn-primary" %>
+                    class: "btn btn-secondary" %>
     <% else %>
       <%= link_to "Sign in",
                   new_user_session_path,
-                  class: "btn btn-primary navbar__right" %>
+                  class: "btn btn-secondary navbar__right" %>
     <% end %>
   </header>
 
@@ -261,77 +248,15 @@ def layouts
 
   # Footer
   file 'app/views/shared/_footer.html.erb', <<~HTML
-    <div class="footer">
-      <div class="footer-links">
-        <a href="#"><i class="fab fa-github"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-linkedin"></i></a>
-      </div>
-      <div class="footer-copyright">
-        This footer is made with <i class="fas fa-heart"></i> by <a href="https://www.margareti.com" target="_blank">Margareti</a>
-      </div>
+  <div class="footer">
+    <div class="footer__links">
     </div>
-  HTML
-
-  # Dark Mode HTML
-  file 'app/views/shared/_dark_mode.html.erb', <<~HTML
-  <div class="dark-mode-switch" data-controller="dark">
-    <div class=dark-mode-btn data-action="click->dark#darkMode">
+    <div class="footer__copyright">
+      Made with <i class="fas fa-heart"></i> by <a href="https://www.margareti.com" target="_blank">Margareti</a>
     </div>
   </div>
 
   HTML
-  
-  # Dark Model JS
-  file 'app/javascript/controllers/dark_controller.js', <<~JS
-  import { Controller } from "@hotwired/stimulus"
-
-  export default class extends Controller {
-    connect() {
-      var theme = getCookie("theme")
-      if (theme == "light-mode") {
-        document.querySelector(".dark-mode-btn").innerHTML = "🌘"
-      } else {
-        document.querySelector(".dark-mode-btn").innerHTML = "🌞"
-      }
-
-      // Get cookie - for reference only (cosole.log())
-      function getCookie(cname) {
-        let name = cname + "=";
-        let ca = document.cookie.split(';');
-        for(let i = 0; i < ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-          }
-          if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-          }
-        }
-        return "";
-      }
-
-    }
-  
-    darkMode() {
-      var element = document.body
-      element.classList.toggle("dark-mode")
-  
-      // Cookies toggle
-      let currentTheme = element.classList.contains("dark-mode") ? "dark-mode" : "light-mode"
-      if (currentTheme == "dark-mode") {
-        document.body.classList.remove("light-mode")
-        document.querySelector(".dark-mode-btn").innerHTML = "🌞"
-        document.cookie = "theme=dark-mode"
-      } else {
-        document.cookie = "theme=light-mode"
-        document.querySelector(".dark-mode-btn").innerHTML = "🌘"
-      }
-    }
-  }
-  JS
 
   # Flash removals JS
   file 'app/javascript/controllers/removals_controller.js', <<~JS
@@ -354,10 +279,6 @@ def layouts
   </div>
   HTML
   end
-
-  # Add dark-mode to body -> needs to be at the end!
-  gsub_file('app/views/layouts/application.html.erb', '<body>', '<body class="<%= cookies[:theme] %>">')
-
 end
 
 # Main setup
@@ -369,11 +290,8 @@ after_bundle do
   add_users
   add_authorization
   
-  # add_jsbundling
-  # add_javascript
   add_dartsass_rails
   add_bootstrap
-  # add_sass
   add_simple_form
   copy_templates
   
@@ -384,13 +302,11 @@ after_bundle do
   set_environments
 
   rails_command 'db:drop db:create db:migrate'
-  # run "yarn build:css"
   
   # Commit everything to git
   unless ENV["SKIP_GIT"]
     git :init
     git add: "."
-    # git commit will fail if user.email is not configured
     begin
       git commit: %( -m 'Initial commit' )
     rescue StandardError => e
@@ -401,7 +317,5 @@ after_bundle do
   say
   say "Template app successfully created!", :blue
   say
-  # say "You still have to run:  rails db:create db:migrate"
-  # say "And then to build the css: yarn build:css"  
   say "To run the server, run: bin/dev"
 end

@@ -263,9 +263,7 @@ def layouts
 
   # Dark Mode HTML
   file 'app/views/shared/_dark_mode.html.erb', <<~HTML
-  <div class="dark-mode-switch" data-controller="dark">
-    <div class=dark-mode-btn data-action="click->dark#darkMode">
-    </div>
+  <div class="dark-mode-switch" data-controller="dark" data-action="click->dark#darkMode">
   </div>
 
   HTML
@@ -276,45 +274,42 @@ def layouts
 
   export default class extends Controller {
     connect() {
-      var theme = getCookie("theme")
-      if (theme == "light-mode") {
-        document.querySelector(".dark-mode-btn").innerHTML = "🌘"
+      if (this.getCookie("theme") == "light-mode") {
+        this.element.innerHTML = "🌘"
       } else {
-        document.querySelector(".dark-mode-btn").innerHTML = "🌞"
+        this.element.innerHTML = "🌞"
       }
-
-      // Get cookie - for reference only (cosole.log())
-      function getCookie(cname) {
-        let name = cname + "=";
-        let ca = document.cookie.split(';');
-        for(let i = 0; i < ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-          }
-          if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-          }
-        }
-        return "";
-      }
-
     }
   
     darkMode() {
-      var element = document.body
-      element.classList.toggle("dark-mode")
-  
+      document.body.classList.toggle("dark-mode")
+    
       // Cookies toggle
-      let currentTheme = element.classList.contains("dark-mode") ? "dark-mode" : "light-mode"
+      let currentTheme = document.body.classList.contains("dark-mode") ? "dark-mode" : "light-mode"
       if (currentTheme == "dark-mode") {
         document.body.classList.remove("light-mode")
-        document.querySelector(".dark-mode-btn").innerHTML = "🌞"
+        this.element.innerHTML = "🌞"
         document.cookie = "theme=dark-mode"
       } else {
         document.cookie = "theme=light-mode"
-        document.querySelector(".dark-mode-btn").innerHTML = "🌘"
+        this.element.innerHTML = "🌘"
       }
+    }
+
+    // Get cookie - for reference only (cosole.log())
+    getCookie(cname) {
+      let name = cname + "=";
+      let ca = document.cookie.split(';');
+      for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
     }
   }
   JS

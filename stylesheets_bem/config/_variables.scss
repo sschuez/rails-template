@@ -21,6 +21,9 @@
   --color-text-body:   hsl(0, 5%, 25%);
   --color-text-muted:  hsl(0, 1%, 44%);
 
+  // Dark text colors
+  --color-text-body-dark: #fefae0;
+  
   // Classical and robust spacing system
   --space-xxxs: 0.25rem; // 4px
   --space-xxs: 0.375rem; // 6px
@@ -32,7 +35,7 @@
   --space-xxl: 2.5rem;   // 40px
   --space-xxxl: 3rem;    // 48px
   --space-xxxxl: 4rem;   // 64px
-
+  
   // Application colors
   --color-primary:          hsl(350, 67%, 50%);
   --color-primary-rotate:   hsl(10, 73%, 54%);
@@ -41,7 +44,13 @@
   --color-secondary-rotate: hsl(120, 45%, 56%);
   --color-tertiary:         hsl(49, 89%, 64%);
   --color-glint:            hsl(210, 100%, 82%);
-
+  
+  // Dark mode
+  --color-background-dark:  #1B2733;
+  --color-secondary-background-dark: #19328a;
+  --color-tertiary-background-dark: #27323E;
+  --color-footer-background-dark: #001a2c;
+  
   // Neutral colors
   --color-white:      hsl(0, 0%, 100%);
   --color-background: hsl(30, 50%, 98%);
