@@ -11,7 +11,6 @@ or
 
 ```bash
 rails new \
---css=sass \
 --database postgresql \
 -m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bem.rb \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
