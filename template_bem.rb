@@ -18,7 +18,7 @@ def add_gems
   gem 'devise'
   gem 'pundit'
   gem "dartsass-rails"
-  gem "bootstrap"
+  # gem "bootstrap"
   gem 'simple_form'
 end
 
@@ -89,9 +89,12 @@ def add_dartsass_rails
 @use "config/animations";
 
 // Components
+@use "components/btn";
+@use "components/empty_state";
 @use "components/error_message";
 @use "components/flash";
 @use "components/footer";
+@use "components/form";
 @use "components/navbar";
 @use "components/turbo_progress_bar";
 @use "components/visually_hidden";
@@ -104,23 +107,44 @@ def add_dartsass_rails
 @use "utilities/margins";
 
 // External Libraries
-@import "bootstrap";
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
+# @import "bootstrap";
+# @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
 end
 
-def add_bootstrap
-  run "bin/importmap pin bootstrap"
-  gsub_file('app/javascript/application.js', 'import "controllers"', 'import "controllers"
-import "bootstrap"')
-end
+# def add_bootstrap
+#   run "bin/importmap pin bootstrap"
+#   gsub_file('app/javascript/application.js', 'import "controllers"', 'import "controllers"
+# import "bootstrap"')
+# end
 
 
 def add_simple_form
-  generate "simple_form:install --bootstrap" 
+  generate "simple_form:install" 
   
-  # Replace simple form initializer to work with Bootstrap 5
-  run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
+  # Replace simple form initializer to work with layout
   run 'rm config/initializers/simple_form.rb'
+  file 'config/initializers/simple_form.rb', <<~RUBY
+  SimpleForm.setup do |config|
+    # Wrappers configration
+    config.wrappers :default, class: "form__group" do |b|
+      b.use :html5
+      b.use :placeholder
+      b.use :label, class: "visually-hidden"
+      b.use :input, class: "form__input", error_class: "form__input--invalid"
+    end
+
+    # Default configuration
+    config.generate_additional_classes_for = []
+    config.default_wrapper                 = :default
+    config.button_class                    = "btn"
+    config.label_text                      = lambda { |label, _, _| label }
+    config.error_notification_tag          = :div
+    config.error_notification_class        = "error_notification"
+    config.browser_validations             = false
+    config.boolean_style                   = :nested
+    config.boolean_label_class             = "form__checkbox-label"
+  end
+  RUBY
 end
 
 def copy_templates
@@ -294,7 +318,7 @@ after_bundle do
   add_authorization
   
   add_dartsass_rails
-  add_bootstrap
+  # add_bootstrap
   add_simple_form
   copy_templates
   
