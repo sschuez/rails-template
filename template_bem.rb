@@ -373,7 +373,7 @@ after_bundle do
   # add_javascript
   add_dartsass_rails
   add_bootstrap
-  add_sass
+  # add_sass
   add_simple_form
   copy_templates
   
