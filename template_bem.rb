@@ -81,31 +81,31 @@ def add_dartsass_rails
   rails_command "./bin/rails dartsass:install"  
   run "rm app/assets/stylesheets/application.css"
   gsub_file('app/assets/stylesheets/application.scss', '// Sassy', '// Mixins
-  @use "mixins/media";
-  
-  // Configuration
-  @use "config/variables";
-  @use "config/reset";
-  @use "config/animations";
-  
-  // Components
-  @use "components/error_message";
-  @use "components/flash";
-  @use "components/footer";
-  @use "components/navbar";
-  @use "components/turbo_progress_bar";
-  @use "components/visually_hidden";
-  
-  // Layouts
-  @use "layouts/container";
-  @use "layouts/header";
-  
-  // Utilities
-  @use "utilities/margins";
-  
-  // External Libraries
-  @import "bootstrap";
-  @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
+@use "mixins/media";
+
+// Configuration
+@use "config/variables";
+@use "config/reset";
+@use "config/animations";
+
+// Components
+@use "components/error_message";
+@use "components/flash";
+@use "components/footer";
+@use "components/navbar";
+@use "components/turbo_progress_bar";
+@use "components/visually_hidden";
+
+// Layouts
+@use "layouts/container";
+@use "layouts/header";
+
+// Utilities
+@use "utilities/margins";
+
+// External Libraries
+@import "bootstrap";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
 end
 
 def add_bootstrap
