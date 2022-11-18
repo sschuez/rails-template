@@ -7,6 +7,17 @@ rails new \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
 
+or
+
+```bash
+rails new \
+--css=sass \
+--database postgresql \
+-m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bem.rb \
+CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
+```
+
+
 # Gems that are installed and configured:
 * devise (Authetication)
 * pundit (Authorisation)
@@ -14,7 +25,7 @@ CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 * simple_form (preconfigured with Bootstrap)
 
 # Layouts
-I added a navbar, a footer and some alerts. Fontawesome is configured, too (For icons).
+I added a navbar, a footer and some alerts. Fontawesome, as well as bootstrap is configured for icons.
 The whole css is done via dartsass-rails. I have created a structure to organise the sass-stylesheets under your assets: 
 * components 
 * pages
