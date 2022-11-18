@@ -107,8 +107,8 @@ def add_dartsass_rails
 @use "utilities/margins";
 
 // External Libraries
-# @import "bootstrap";
-# @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
+// @import "bootstrap";
+// @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
 end
 
 # def add_bootstrap
@@ -153,7 +153,7 @@ def copy_templates
   run 'mv app/assets/stylesheets/application.scss app/assets/stylesheets_bem'
   run 'rm -r app/assets/stylesheets'
   run 'mv app/assets/stylesheets_bem app/assets/stylesheets'
-  # run 'rm -r app/assets/__MACOSX'
+  run 'rm -r app/assets/__MACOSX'
 end
 
 unless rails_6_or_newer?
