@@ -1,11 +1,11 @@
 # Start App, BEM CSS
+Project with devise, user model (email, admin:boolean) and bootstrap preconfigured but now preconfigrued with BEM CSS.
 ```bash
 rails new \
 --database postgresql \
 -m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bem.rb \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
-Project with devise, user model (email, admin:boolean) and bootstrap preconfigured but now preconfigrued with BEM CSS.
 
 # Gems that are installed and configured:
 * devise (Authetication)
