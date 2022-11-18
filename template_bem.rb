@@ -81,31 +81,31 @@ def add_dartsass_rails
   rails_command "./bin/rails dartsass:install"  
   run "rm app/assets/stylesheets/application.css"
   gsub_file('app/assets/stylesheets/application.scss', '// Sassy', '// Mixins
-    @use "mixins/media";
-    
-    // Configuration
-    @use "config/variables";
-    @use "config/reset";
-    @use "config/animations";
-    
-    // Components
-    @use "components/error_message";
-    @use "components/flash";
-    @use "components/footer";
-    @use "components/navbar";
-    @use "components/turbo_progress_bar";
-    @use "components/visually_hidden";
-    
-    // Layouts
-    @use "layouts/container";
-    @use "layouts/header";
-    
-    // Utilities
-    @use "utilities/margins";
-    
-    // External Libraries
-    @import "bootstrap";
-    @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
+  @use "mixins/media";
+  
+  // Configuration
+  @use "config/variables";
+  @use "config/reset";
+  @use "config/animations";
+  
+  // Components
+  @use "components/error_message";
+  @use "components/flash";
+  @use "components/footer";
+  @use "components/navbar";
+  @use "components/turbo_progress_bar";
+  @use "components/visually_hidden";
+  
+  // Layouts
+  @use "layouts/container";
+  @use "layouts/header";
+  
+  // Utilities
+  @use "utilities/margins";
+  
+  // External Libraries
+  @import "bootstrap";
+  @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
 end
 
 def add_bootstrap
@@ -120,6 +120,7 @@ def add_simple_form
   
   # Replace simple form initializer to work with Bootstrap 5
   run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
+  run 'rm config/initializers/simple_form.rb'
 end
 
 def copy_templates
@@ -204,7 +205,6 @@ def layouts
 
   # Initial background-main
   background = <<~HTML
-      
       <%= yield %>
       <%= render 'shared/footer' %>
   HTML
@@ -212,7 +212,6 @@ def layouts
   
   # Flashes
   file 'app/views/shared/_flash.html.erb', <<~HTML
-  
     <% flash.each do |flash_type, message| %>
       <div
         class="flash__message"
@@ -227,7 +226,6 @@ def layouts
 
   # Navbar
   file 'app/views/shared/_navbar.html.erb', <<~HTML
-  
   <header class="navbar">
     <% if user_signed_in? %>
       <div class="navbar__brand">
@@ -276,10 +274,12 @@ def layouts
   # Add to layout
   inject_into_file 'app/views/layouts/application.html.erb', after: '<body>' do
   <<-HTML
-  <%= render 'shared/navbar' %>
-  <div id="flash" class="flash">
-    <%= render "shared/flash" %>
-  </div>
+  
+    <%= render 'shared/navbar' %>
+    
+    <div id="flash" class="flash">
+      <%= render "shared/flash" %>
+    </div>
   HTML
   end
 end
