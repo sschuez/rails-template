@@ -10,7 +10,7 @@ CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 # Gems that are installed and configured:
 * devise (Authetication)
 * pundit (Authorisation)
-* dartsass-rails for stylesheets (with Bootstrap)
+* dartsass-rails for stylesheets (with BEM structure)
 * simple_form (preconfigured with custom styling)
 
 # Layouts
