@@ -2,6 +2,7 @@
 Project with devise, user model (email, admin:boolean) preconfigrued with BEM CSS.
 ```bash
 rails new \
+--skip-test \
 --database postgresql \
 -m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bem.rb \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
@@ -34,6 +35,7 @@ A .gitignore setup is also provided.
 Project with devise, user model (email, admin:boolean) and bootstrap preconfigured but now preconfigrued with BEM CSS.
 ```bash
 rails new \
+--skip-test \
 --database postgresql \
 -m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bootstrap.rb \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
@@ -66,6 +68,7 @@ A .gitignore setup is also provided.
 Project with devise, user model (email, admin:boolean) and bootstrap preconfigured.
 ```bash
 rails new \
+--skip-test \
 --database postgresql \
 -m https://raw.githubusercontent.com/sschuez/rails-template/main/template.rb \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
