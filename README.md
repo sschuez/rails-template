@@ -1,5 +1,5 @@
 # Start App, Bootstrap CSS, BEM-ready
-Project with devise, user model (email, admin:boolean) and bootstrap preconfigured but now preconfigrued with BEM CSS.
+Project with devise, user model (email, admin:boolean) and bootstrap preconfigured but also prepared according to BEM CSS methodology.
 ```bash
 rails new \
 --skip-test \
