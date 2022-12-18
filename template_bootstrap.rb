@@ -437,15 +437,15 @@ def layouts
   # Footer
   file 'app/views/shared/_footer.html.erb', <<~HTML
   <div class="footer">
-    <div class="footer-links">
+    <div class="footer__links">
       <a href="#"><i class="fab fa-github"></i></a>
       <a href="#"><i class="fab fa-instagram"></i></a>
       <a href="#"><i class="fab fa-facebook"></i></a>
       <a href="#"><i class="fab fa-twitter"></i></a>
       <a href="#"><i class="fab fa-linkedin"></i></a>
     </div>
-    <div class="footer-copyright">
-      This footer is made with <i class="fas fa-heart"></i> by <a href="https://www.margareti.com" target="_blank">Margareti</a>
+    <div class="footer__copyright">
+      Made with <i class="fas fa-heart"></i> by <a href="https://www.margareti.com" target="_blank">Margareti</a>
     </div>
   </div>
 
