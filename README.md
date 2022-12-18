@@ -1,21 +1,24 @@
-# Start App, BEM CSS
-Project with devise, user model (email, admin:boolean) preconfigrued with BEM CSS.
+# Start App, Bootstrap CSS, BEM-ready
+Project with devise, user model (email, admin:boolean) and bootstrap preconfigured but now preconfigrued with BEM CSS.
 ```bash
 rails new \
 --skip-test \
 --database postgresql \
--m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bem.rb \
+-m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bootstrap.rb \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
 
 # Gems that are installed and configured:
 * devise (Authetication)
 * pundit (Authorisation)
-* dartsass-rails for stylesheets (with BEM structure)
-* simple_form (preconfigured with custom styling)
+* rspec-rails
+* cucumber
+* database_cleaner
+* dartsass-rails for stylesheets (with Bootstrap)
+* simple_form (preconfigured with Bootstrap)
 
 # Layouts
-Very simple navbar, a footer and flash notification ready for hotwire. Fontawesome is configured for icons.
+Very simple navbar, with a sidebar, a footer and flash notification ready for hotwire. Fontawesome, as well as bootstrap is configured for icons, renderd via an Icon model.
 The whole css is done via dartsass-rails. Structure to organise the sass-stylesheets under your assets follow BEM convetion: 
 * components
 * config
@@ -30,25 +33,27 @@ The Javascript is handled via importmaps.
 The template will run db:create db:migrate and the it will run yarn build:css. So running bin/dev should be enough for you to get going.
 A .gitignore setup is also provided.
 
-
-# Start App, Bootstrap CSS
-Project with devise, user model (email, admin:boolean) and bootstrap preconfigured but now preconfigrued with BEM CSS.
+# Start App, BEM CSS
+Project with devise, user model (email, admin:boolean) preconfigrued with BEM CSS.
 ```bash
 rails new \
 --skip-test \
 --database postgresql \
--m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bootstrap.rb \
+-m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bem.rb \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
 
 # Gems that are installed and configured:
 * devise (Authetication)
 * pundit (Authorisation)
-* dartsass-rails for stylesheets (with Bootstrap)
-* simple_form (preconfigured with Bootstrap)
+* rspec-rails
+* cucumber
+* database_cleaner
+* dartsass-rails for stylesheets (with BEM structure)
+* simple_form (preconfigured with custom styling)
 
 # Layouts
-Very simple navbar, a footer and flash notification ready for hotwire. Fontawesome, as well as bootstrap is configured for icons.
+Very simple navbar, a footer and flash notification ready for hotwire. Fontawesome is configured for icons.
 The whole css is done via dartsass-rails. Structure to organise the sass-stylesheets under your assets follow BEM convetion: 
 * components
 * config
@@ -77,6 +82,9 @@ CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 # Gems that are installed and configured:
 * devise (Authetication)
 * pundit (Authorisation)
+* rspec-rails
+* cucumber
+* database_cleaner
 * dartsass-rails for stylesheets (with Bootstrap)
 * simple_form (preconfigured with Bootstrap)
 
