@@ -85,6 +85,7 @@ def add_dartsass_rails
 
 // Configuration
 @use "config/variables";
+@use "config/reset";
 @use "config/animations";
 
 // Components

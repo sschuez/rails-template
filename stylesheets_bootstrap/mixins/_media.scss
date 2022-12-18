@@ -2,4 +2,12 @@
   @if $query == tabletAndUp {
     @media (min-width: 50rem) { @content; }
   }
+
+  @if $query == phoneAndUp {
+    @media (min-width: 30rem) { @content; }
+  }
+
+  @if $query == phone {
+    @media (max-width: 54rem) { @content; }
+  }
 }
