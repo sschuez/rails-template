@@ -91,6 +91,8 @@ def add_dartsass_rails
 @use "components/error_message";
 @use "components/flash";
 @use "components/footer";
+@use "components/navbar";
+@use "components/sidebar";
 @use "components/turbo_progress_bar";
 @use "components/visually_hidden";
 
@@ -194,6 +196,33 @@ def git_ignore
 end
 
 def layouts
+  # Icons
+  file 'app/models/concerns/icon.rb', <<~RUBY
+  class Icon
+    def initialize(icon)
+      @icon = icon
+      @icons = {
+        trash: '<i class="bi bi-trash-fill"></i>',
+        edit: '<i class="bi bi-pencil-fill"></i>',
+        confirm: '<i class="bi bi-check-circle-fill"></i>',
+        cancel: '<i class="bi bi-x-circle-fill"></i>',
+        handle: '<i class="bi bi-grip-horizontal handle mt-xxs ml-s"></i>',
+        repeat: '<i class="bi bi-arrow-repeat"></i>',
+        hamburger: '<i class="bi bi-list hamburger"></i>',
+        close: '<i class="bi bi-x"></i>',
+        close_lg: '<i class="bi bi-x-lg"></i>',
+        sign_out: '<i class="bi bi-box-arrow-in-right"></i>',
+        sign_in: '<i class="bi bi-box-arrow-right"></i>',
+        translate: '<i class="bi bi-translate"></i>'
+      }
+    end
+  
+    def call
+      @icons[@icon.to_sym].html_safe
+    end
+  end
+  RUBY
+
   # Meta
   style = <<~HTML
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -225,28 +254,175 @@ def layouts
   # Navbar
   file 'app/views/shared/_navbar.html.erb', <<~HTML
   
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-      </ul>
+  <header class="navbar" data-controller="sidebar">
+    <div class="navbar__brand">
+      <%= link_to "LOGO", root_path %>
     </div>
-  </nav>
+    <% if user_signed_in? %>
+      <div class="navbar__name">
+        <%= current_user.email %>
+      </div>
+    <% end %>
+    <button data-action="click->sidebar#toggleOpen">
+      <%= Icon.new("hamburger").call %>
+    </button>
+    <%= render partial: "shared/sidebar" %>
+  </header>
+
+  HTML
+
+  #  Sidebar
+  file 'app/javascript/controllers/sidebar_controller.js', <<~JS
+  import { Controller } from "@hotwired/stimulus"
+
+  // Connects to data-controller="sidebar"
+  export default class extends Controller {
+    static targets = [ "toggle", "sub", "arrowIcon" ]
+
+    connect() {
+      this.arrowDown = `<i class="bi bi-caret-down-fill" id="caret"></i>`
+      this.arrowLeft = `<i class="bi bi-caret-left-fill" id="caret"></i>`
+    
+      this.getArrowIcons()
+    }
+
+    getArrowIcons() {
+      this.arrowIconTargets.forEach(arrow => {
+        arrow.insertAdjacentHTML("beforebegin", this.arrowDown)
+        arrow.remove()
+      })
+    }
+
+    toggleOpen() {
+      this.toggleTarget.classList.add("open");
+    }
+  
+    toggleClose() {
+      if (event.target.classList.contains("sidebar") || event.currentTarget.id === "close-button") {
+        this.toggleTarget.classList.remove("open");
+      }
+    }
+  
+    toggleSub() {
+      const sub = event.currentTarget.querySelector("#sub")
+      const arrow = event.currentTarget.querySelector("#caret")
+
+      sub.classList.toggle("open")    
+    
+      if (sub.classList.contains("open")) {
+        arrow.insertAdjacentHTML("beforebegin", this.arrowLeft)
+        arrow.remove()
+      } else {
+        arrow.insertAdjacentHTML("beforebegin", this.arrowDown)
+        arrow.remove()
+      }
+    }
+  }
+  JS
+
+  file 'app/views/shared/_sidebar.html.erb', <<~HTML
+  
+  <div class="sidebar" data-sidebar-target="toggle" data-action="click->sidebar#toggleClose">
+    <div class="sidebar__container">
+      <div class="sidebar__inner">
+        <div class="sidebar__context">
+        
+          <button id="close-button" data-action="click->sidebar#toggleClose">
+            <%= Icon.new("close_lg").call %>
+          </button>
+        
+          <ul data-controller="sidebar">
+              <% if user_signed_in? %>
+                <li>
+                  <%= button_to destroy_user_session_path,
+                      method: :delete,
+                      class: "sidebar__item" do %>
+                    <%= Icon.new("sign_out").call %>
+                    <span>Sign out</span>
+                  <% end %>
+                </li>
+              <% else %>
+                <li>
+                  <%= link_to new_user_session_path, class: "sidebar__item" do %>
+                    <%= Icon.new("sign_in").call %>
+                    <span>Sign in</span>
+                  <% end %>
+                </li>
+              <% end %>
+
+              <li>
+                <div class="divider"></div>
+              </li>
+
+              <li>
+                <%= link_to root_path, class: "sidebar__item" do %>
+                  <%= Icon.new("repeat").call %>
+                  <span>
+                    Another button
+                  </span>
+                <% end %>
+              </li>
+              
+              <li>
+                <div class="divider"></div>
+              </li>
+            
+              <li>
+                <%= link_to root_path, class: "sidebar__item" do %>
+                  <%= Icon.new("repeat").call %>
+                  <span>
+                    One more button
+                  </span>
+                <% end %>
+              </li>
+
+            <li>
+              <button class="sidebar__item toggle" data-action="click->sidebar#toggleSub">
+                <%= Icon.new("translate").call %>
+                <span>
+                  Language
+                </span>
+                <div data-sidebar-target="arrowIcon"></div>
+                <div class="toggle-sub" id="sub">
+                  <ul>
+                    <li>
+                      <%= link_to 'One language', url_for(locale: :de) %>
+                    </li>
+                    <li>
+                      <%= link_to 'Another language', url_for(locale: :en) %>
+                    </li>
+                  </ul>
+                </div>
+              </button>
+            </li>
+
+            <li>
+              <button class="sidebar__item toggle" data-action="click->sidebar#toggleSub">
+                <%= Icon.new("repeat").call %>
+                <span>
+                  Something else
+                </span>
+                <div data-sidebar-target="arrowIcon"></div>
+                <div class="toggle-sub" id="sub">
+                  <ul>
+                    <li>
+                      <%= link_to 'Root', root_path %>
+                    </li>
+                    <li>
+                      <%= link_to 'Root 2', root_path %>
+                    </li>
+                  </ul>
+                </div>
+              </button>
+            </li>
+
+
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  </div>
 
   HTML
 
