@@ -257,13 +257,29 @@ def layouts
         <%= message %>
       </div>
     <% end %>
-
   HTML
-
-  # Navbar
-  file 'app/views/shared/_navbar.html.erb', <<~HTML
   
-  <header class="navbar" data-controller="sidebar">
+  # Navbar JS
+  file 'app/javascript/controllers/navbar_controller.js', <<~JS
+  import { Controller } from "@hotwired/stimulus"
+
+  // Connects to data-controller="navbar"
+  export default class extends Controller {
+    updateNavbar() {
+      if (window.scrollY >= window.innerHeight) {
+        this.element.classList.add("navbar--white")
+      } else {
+        this.element.classList.remove("navbar--white")
+      }
+    }
+  }
+  JS
+
+  # Navbar HTML
+  file 'app/views/shared/_navbar.html.erb', <<~HTML
+  <header class="navbar fixed-top" 
+          data-controller="sidebar navbar"
+          data-action="scroll@window->navbar#updateNavbar">
     <div class="navbar__brand">
       <%= link_to "LOGO", root_path %>
     </div>
@@ -277,10 +293,9 @@ def layouts
     </button>
     <%= render partial: "shared/sidebar" %>
   </header>
-
   HTML
 
-  #  Sidebar
+  #  Sidebar JS
   file 'app/javascript/controllers/sidebar_controller.js', <<~JS
   import { Controller } from "@hotwired/stimulus"
 
@@ -329,9 +344,10 @@ def layouts
   }
   JS
 
+  # Sidebar HTML
   file 'app/views/shared/_sidebar.html.erb', <<~HTML
-  
-  <div class="sidebar" data-sidebar-target="toggle" data-action="click->sidebar#toggleClose">
+  <div  class="sidebar" 
+        data-sidebar-target="toggle" data-action="click->sidebar#toggleClose">
     <div class="sidebar__container">
       <div class="sidebar__inner">
         <div class="sidebar__context">
@@ -425,14 +441,12 @@ def layouts
               </button>
             </li>
 
-
           </ul>
 
         </div>
       </div>
     </div>
   </div>
-
   HTML
 
   # Footer
@@ -446,7 +460,6 @@ def layouts
       Made with <i class="fas fa-heart"></i> by <a href="https://www.margareti.com" target="_blank">Margareti</a>
     </div>
   </div>
-
   HTML
 
   # Flash removals JS

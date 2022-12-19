@@ -18,6 +18,7 @@ body {
   display: flex !important;
   flex-direction: column !important;
   min-height: 100% !important;
+  margin-top: var(--space-xxxxl) !important;
 
   background-color: var(--color-background) !important;
   color: var(--color-text-body) !important;
