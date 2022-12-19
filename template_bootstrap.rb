@@ -96,6 +96,7 @@ def add_dartsass_rails
 @use "config/animations";
 
 // Components
+@use "components/btn";
 @use "components/error_message";
 @use "components/flash";
 @use "components/footer";

@@ -1,0 +1,97 @@
+.my-btn {
+  display: inline-block;
+  padding: var(--space-xxs) var(--space-m) !important;
+  border-radius: var(--border-radius) !important;
+  background-origin: border-box !important; // Invisible borders with linear gradients
+  background-color: transparent !important;
+  border: solid 2px transparent !important;
+  font-weight: bold !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  outline: none !important;
+  transition: filter 400ms, color 200ms !important;
+
+  &:hover,
+  &:focus,
+  &:focus-within,
+  &:active {
+    transition: filter 250ms, color 200ms !important;
+  }
+
+  // Modifiers will go there
+  &--primary {
+    color: var(--color-white) !important;
+    background-image: linear-gradient(to right, var(--color-primary), var(--color-primary-rotate)) !important;
+
+    &:hover,
+    &:focus,
+    &:focus-within,
+    &:active {
+      color: var(--color-white) !important;
+      filter: saturate(1.4) brightness(115%) !important;
+    }
+  }
+
+  &--secondary {
+    color: var(--color-white) !important;
+    background-image: linear-gradient(to right, var(--color-secondary), var(--color-secondary-rotate)) !important;
+
+    &:hover,
+    &:focus,
+    &:focus-within,
+    &:active {
+      color: var(--color-white) !important;
+      filter: saturate(1.2) brightness(110%) !important;
+    }
+  }
+
+  &--light {
+    color: var(--color-dark) !important;
+    background-color: var(--color-light) !important;
+
+    &:hover,
+    &:focus,
+    &:focus-within,
+    &:active {
+      color: var(--color-dark) !important;
+      filter: brightness(92%) !important;
+    }
+  }
+
+  &--dark {
+    color: var(--color-white) !important;
+    border-color: var(--color-dark) !important;
+    background-color: var(--color-dark) !important;
+
+    &:hover,
+    &:focus,
+    &:focus-within,
+    &:active {
+      color: var(--color-white) !important;
+    }
+  }
+}
+
+.button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-primary) !important;
+  text-decoration: none !important;
+  transition: color 200ms !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: var(--color-primary-rotate) !important;
+  }
+
+  &--nav {
+    border-bottom: 0.3rem transparent solid;
+    
+    &:hover {
+      border-bottom: 0.3rem var(--lime-green) solid;
+      cursor: pointer;
+    }
+  }
+}
