@@ -220,8 +220,8 @@ def layouts
         hamburger: '<i class="bi bi-list hamburger"></i>',
         close: '<i class="bi bi-x"></i>',
         close_lg: '<i class="bi bi-x-lg"></i>',
-        sign_out: '<i class="bi bi-box-arrow-in-right"></i>',
-        sign_in: '<i class="bi bi-box-arrow-right"></i>',
+        sign_out: '<i class="bi bi-box-arrow-right"></i>',
+        sign_in: '<i class="bi bi-box-arrow-in-right"></i>',
         translate: '<i class="bi bi-translate"></i>'
       }
     end
@@ -346,60 +346,60 @@ def layouts
 
   # Sidebar HTML
   file 'app/views/shared/_sidebar.html.erb', <<~HTML
-  <div  class="sidebar" 
+  <div class="sidebar" 
         data-sidebar-target="toggle" data-action="click->sidebar#toggleClose">
     <div class="sidebar__container">
       <div class="sidebar__inner">
         <div class="sidebar__context">
-        
+      
           <button id="close-button" data-action="click->sidebar#toggleClose">
             <%= Icon.new("close_lg").call %>
           </button>
-        
-          <ul data-controller="sidebar">
-              <% if user_signed_in? %>
-                <li>
-                  <%= button_to destroy_user_session_path,
-                      method: :delete,
-                      class: "sidebar__item" do %>
-                    <%= Icon.new("sign_out").call %>
-                    <span>Sign out</span>
-                  <% end %>
-                </li>
-              <% else %>
-                <li>
-                  <%= link_to new_user_session_path, class: "sidebar__item" do %>
-                    <%= Icon.new("sign_in").call %>
-                    <span>Sign in</span>
-                  <% end %>
-                </li>
+      
+          <ul>
+            <% if user_signed_in? %>
+              <li>
+                <%= button_to destroy_user_session_path,
+                    method: :delete,
+                    class: "sidebar__item" do %>
+                  <%= Icon.new("sign_out").call %>
+                  <span>Sign out</span>
+                <% end %>
+              </li>
+            <% else %>
+              <li>
+                <%= link_to new_user_session_path, class: "sidebar__item" do %>
+                  <%= Icon.new("sign_in").call %>
+                  <span>Sign in</span>
+                <% end %>
+              </li>
+            <% end %>
+
+            <li>
+              <div class="divider"></div>
+            </li>
+
+            <li>
+              <%= link_to root_path, class: "sidebar__item" do %>
+                <%= Icon.new("repeat").call %>
+                <span>
+                  Another button
+                </span>
               <% end %>
-
-              <li>
-                <div class="divider"></div>
-              </li>
-
-              <li>
-                <%= link_to root_path, class: "sidebar__item" do %>
-                  <%= Icon.new("repeat").call %>
-                  <span>
-                    Another button
-                  </span>
-                <% end %>
-              </li>
-              
-              <li>
-                <div class="divider"></div>
-              </li>
-            
-              <li>
-                <%= link_to root_path, class: "sidebar__item" do %>
-                  <%= Icon.new("repeat").call %>
-                  <span>
-                    One more button
-                  </span>
-                <% end %>
-              </li>
+            </li>
+          
+            <li>
+              <div class="divider"></div>
+            </li>
+        
+            <li>
+              <%= link_to root_path, class: "sidebar__item" do %>
+                <%= Icon.new("repeat").call %>
+                <span>
+                  One more button
+                </span>
+              <% end %>
+            </li>
 
             <li>
               <button class="sidebar__item toggle" data-action="click->sidebar#toggleSub">
