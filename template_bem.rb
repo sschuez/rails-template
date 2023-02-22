@@ -15,7 +15,7 @@ def rails_6_or_newer?
 end
 
 def add_gems
-  gem 'devise'
+  gem 'devise', github: "heartcombo/devise", branch: "main"
   gem 'pundit'
   gem "dartsass-rails"
   # gem "bootstrap"
@@ -34,32 +34,34 @@ def add_users
   generate "devise:install"
   generate "devise:views"
 
+  # OLD WORKAROUND TO MAKE TURBO_STREAM WORK WITH DEVISE
+  
   # Configure Devise to handle TURBO_STREAM requests like HTML requests
-  inject_into_file "config/initializers/devise.rb", "  config.navigational_formats = ['/', :html, :turbo_stream]", after: "Devise.setup do |config|\n"
+  # inject_into_file "config/initializers/devise.rb", "  config.navigational_formats = ['/', :html, :turbo_stream]", after: "Devise.setup do |config|\n"
   
-  inject_into_file 'config/initializers/devise.rb', after: "# frozen_string_literal: true\n" do <<~EOF
-    class TurboFailureApp < Devise::FailureApp
-      def respond
-        if request_format == :turbo_stream
-          redirect
-        else
-          super
-        end
-      end
+  # inject_into_file 'config/initializers/devise.rb', after: "# frozen_string_literal: true\n" do <<~EOF
+  #   class TurboFailureApp < Devise::FailureApp
+  #     def respond
+  #       if request_format == :turbo_stream
+  #         redirect
+  #       else
+  #         super
+  #       end
+  #     end
   
-      def skip_format?
-        %w(html turbo_stream */*).include? request_format.to_s
-      end
-    end
-  EOF
-  end
+  #     def skip_format?
+  #       %w(html turbo_stream */*).include? request_format.to_s
+  #     end
+  #   end
+  # EOF
+  # end
 
-  inject_into_file 'config/initializers/devise.rb', after: "# ==> Warden configuration\n" do <<-EOF
-    config.warden do |manager|
-      manager.failure_app = TurboFailureApp
-    end
-    EOF
-  end
+  # inject_into_file 'config/initializers/devise.rb', after: "# ==> Warden configuration\n" do <<-EOF
+  #   config.warden do |manager|
+  #     manager.failure_app = TurboFailureApp
+  #   end
+  #   EOF
+  # end
 
   generate :devise, "User", "admin:boolean"
 
