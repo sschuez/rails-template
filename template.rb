@@ -133,12 +133,12 @@ end
 
 def controllers
   # # App controller
-  # run 'rm app/controllers/application_controller.rb'
-  # file 'app/controllers/application_controller.rb', <<~RUBY
-  #   class ApplicationController < ActionController::Base
-  #   #{  "protect_from_forgery with: :exception\n" if Rails.version < "5.2"}  before_action :authenticate_user!
-  #   end
-  # RUBY
+  run 'rm app/controllers/application_controller.rb'
+  file 'app/controllers/application_controller.rb', <<~RUBY
+    class ApplicationController < ActionController::Base
+    #{  "protect_from_forgery with: :exception\n" if Rails.version < "5.2"}  before_action :authenticate_user!
+    end
+  RUBY
 
   # Page controller
   generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
