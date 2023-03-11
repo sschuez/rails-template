@@ -178,7 +178,6 @@ def controllers
     <!DOCTYPE html>
     <html>
       <head>
-        <%= render "shared/meta" %>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <script src="https://kit.fontawesome.com/649ff54fcc.js" crossorigin="anonymous"></script>
 

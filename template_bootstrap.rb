@@ -180,7 +180,6 @@ def controllers
     <!DOCTYPE html>
     <html>
       <head>
-        <%= render "shared/meta" %>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <script src="https://kit.fontawesome.com/649ff54fcc.js" crossorigin="anonymous"></script>
 
@@ -516,13 +515,95 @@ def layouts
 
   # Footer
   file 'app/views/shared/_footer.html.erb', <<~HTML
+  
   <div class="footer">
-    <div class="footer__links">
-      <a href="#"><i class="fab fa-instagram"></i></a>
-      <a href="#"><i class="fab fa-linkedin"></i></a>
-    </div>
-    <div class="footer__copyright">
-      Made with <i class="fas fa-heart"></i> by <a href="https://www.margareti.com" target="_blank">Margareti</a>
+    <div class="container">
+      <footer class="py-5">
+        <div class="row">
+          <div class="col-6 col-md-2 mb-3">
+            <h5>Section</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2">
+                <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
+              </li>
+              <li class="nav-item mb-2">
+              <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
+              </li>
+              <li class="nav-item mb-2">
+              <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
+              </li>
+              <li class="nav-item mb-2">
+              <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-6 col-md-2 mb-3">
+            <h5>Section</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2">
+              <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
+              </li>
+              <li class="nav-item mb-2">
+              <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
+              </li>
+              <li class="nav-item mb-2">
+              <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-6 col-md-2 mb-3">
+            <h5>Section</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2">
+                <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
+              </li>
+              <li class="nav-item mb-2">
+                <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
+              </li>
+              <% if user_signed_in? %>
+                <li class="nav-item mb-2">
+                  <%= button_to "Log out",
+                      destroy_user_session_path,
+                      method: :delete,
+                      class: "nav-link p-0 text-muted button" do %>
+                </li>
+              <% else %>
+                <li class="nav-item mb-2">
+                  <%= link_to "Log in",
+                      new_user_session_path, 
+                      class: "nav-link p-0 text-muted" %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+
+          <%# <div class="col-md-5 offset-md-1 mb-3"> %>
+            <%#= form_tag adduser_path, method: :post, data: { turbo: false } do %>
+            <%#= form_tag root_path, method: :post, data: { turbo: false } do %>
+              <%# <h5>Subscribe to the newsletter</h5> %>
+              <%# <p>Digest of what's new and exciting.</p> %>
+              <%# <div class="d-flex flex-column flex-sm-row w-100 gap-2"> %>
+                <%# <label for="newsletter1" class="visually-hidden">Email address</label> %>
+                  <%# <input id="newsletter1" name="email_address" type="text" class="form-control" placeholder="Email address"> %>
+                  <%# <input type="submit" value="💌 Subscribe" class="my-btn my-btn--dark"> %>
+              <%# </div> %>
+            <%# end %>
+          <%# </div> %>
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+          <p class="footer__copyright"> 
+            Made with ♥️ by &copy; <a href="https://www.margareti.com" target="_blank">Margareti</a>
+          </p>
+          <ul class="list-unstyled d-flex">
+            <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#twitter"></use></svg></a></li>
+            <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg></a></li>
+            <li class="ms-3"><a class="link-dark" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a></li>
+          </ul>
+        </div>
+      </footer>
     </div>
   </div>
   HTML
