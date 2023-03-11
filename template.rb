@@ -153,8 +153,8 @@ def controllers
   RUBY
 
   # Errors controller
-  rm 'public/500.html'
-  rm 'public/404.html'
+  run 'rm public/500.html'
+  run 'rm public/404.html'
 
   route "match '/500', via: :all, to: 'errors#internal_server_error'"
   route "match '/404', via: :all, to: 'errors#not_found'"
