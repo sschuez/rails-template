@@ -532,9 +532,6 @@ def layouts
               <li class="nav-item mb-2">
               <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
               </li>
-              <li class="nav-item mb-2">
-              <%= link_to "A link", root_path, class: "nav-link p-0 text-muted" %>
-              </li>
             </ul>
           </div>
 
@@ -567,7 +564,7 @@ def layouts
                   <%= button_to "Log out",
                       destroy_user_session_path,
                       method: :delete,
-                      class: "nav-link p-0 text-muted button" do %>
+                      class: "nav-link p-0 text-muted button" %>
                 </li>
               <% else %>
                 <li class="nav-item mb-2">
