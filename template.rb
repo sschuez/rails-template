@@ -205,7 +205,7 @@ def controllers
     <br>
     <p>Really sorry, something went wrong here 😅</p>
     <br>
-    <%= link_to "Back to homepage", root_url, class: "my-btn my-btn--primary" %>
+    <%= link_to "Back to homepage", root_url %>
   HTML
 
   file 'app/views/errors/not_found.html.erb', <<~HTML
@@ -213,7 +213,7 @@ def controllers
     <br>
     <p>Sorry, this page does not exist 😅</p>
     <br>
-    <%= link_to "Back to homepage", root_url, class: "my-btn my-btn--primary" %>
+    <%= link_to "Back to homepage", root_url %>
   HTML
 
   

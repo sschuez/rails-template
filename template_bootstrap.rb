@@ -154,6 +154,71 @@ def controllers
     end
   RUBY
 
+  # Errors controller
+  rm 'public/500.html'
+  rm 'public/404.html'
+
+  route "match '/500', via: :all, to: 'errors#internal_server_error'"
+  route "match '/404', via: :all, to: 'errors#not_found'"
+
+  application 'config.exceptions_app = self.routes'
+
+  file 'app/controllers/errors_controller.rb', <<~RUBY
+    class ErrorsController < ActionController::Base
+
+      def internal_server_error
+        render status: 500
+      end
+    
+      def not_found
+        render status: 404
+      end
+    end
+  RUBY
+  
+  file 'app/views/layouts/errors.html.erb', <<~HTML
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <%= render "shared/meta" %>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <script src="https://kit.fontawesome.com/649ff54fcc.js" crossorigin="anonymous"></script>
+
+        <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+        <%= javascript_importmap_tags %>
+      </head>
+
+      <body class="text-center">
+
+        <div id="flash" class="flash">
+          <%= render "shared/flash" %>
+        </div>
+
+        <div class="container">
+          <%= yield %>
+        </div>
+
+      </body>
+    </html>
+  HTML
+  
+  file 'app/views/errors/internal_server_error.html.erb', <<~HTML
+    <h1>😱 <%= response.status %> <%= action_name.humanize %> 😱</h1>
+    <br>
+    <p>Really sorry, something went wrong here 😅</p>
+    <br>
+    <%= link_to "Back to homepage", root_url, class: "my-btn my-btn--primary" %>
+  HTML
+
+  file 'app/views/errors/not_found.html.erb', <<~HTML
+    <h1>😱 <%= response.status %> <%= action_name.humanize %> 😱</h1>
+    <br>
+    <p>Sorry, this page does not exist 😅</p>
+    <br>
+    <%= link_to "Back to homepage", root_url, class: "my-btn my-btn--primary" %>
+  HTML
+
+
   # ApplicationHelper
   run 'rm app/helpers/application_helper.rb'
   file 'app/helpers/application_helper.rb', <<~RUBY
