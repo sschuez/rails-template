@@ -24,7 +24,7 @@ def add_gems
     gem "rspec-rails"
   end
   gem_group :test do
-    gem 'cucumber-rails', require: false
+    gem 'capybara'
     gem 'database_cleaner'
   end
 end
@@ -651,7 +651,6 @@ after_bundle do
 
   rails_command 'db:drop db:create db:migrate'
   rails_command 'generate rspec:install'
-  rails_command 'generate cucumber:install'
   
   # Commit everything to git
   unless ENV["SKIP_GIT"]
