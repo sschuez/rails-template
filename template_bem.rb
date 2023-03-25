@@ -23,6 +23,7 @@ def add_gems
   
   gem_group :development, :test do
     gem "rspec-rails"
+    gem "factory_bot_rails"
   end
   gem_group :test do
     gem 'capybara'
