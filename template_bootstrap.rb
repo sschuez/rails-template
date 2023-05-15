@@ -25,6 +25,7 @@ def add_gems
     gem "factory_bot_rails"
   end
   gem_group :test do
+    gem 'pundit-matchers'
     gem 'capybara'
     gem 'database_cleaner'
   end
@@ -620,15 +621,117 @@ def layouts
 
   # Add to layout
   inject_into_file 'app/views/layouts/application.html.erb', after: '<body>' do
-  <<-HTML
-  
+    <<-HTML
+    
     <%= render 'shared/navbar' %>
-
+    
     <div id="flash" class="flash">
-      <%= render "shared/flash" %>
+    <%= render "shared/flash" %>
     </div>
-  HTML
+    HTML
   end
+end
+
+def set_up_rspec
+  # Make all necesarry directories
+  system 'mkdir', '-p', 'spec/support'
+  system 'mkdir', '-p', 'spec/features'
+  system 'mkdir', '-p', 'spec/factories'
+  system 'mkdir', '-p', 'spec/policies'
+
+  # Adjust rails_helper.rb
+  insert_into_file 'spec/rails_helper.rb', after: "# specs live under a `spec` directory, which RSpec adds to the `$LOAD_PATH`.\n" do
+    <<-RUBY
+      require 'spec_helper'
+      ENV['RAILS_ENV'] ||= 'test'
+      require_relative '../config/environment'
+      # Prevent database truncation if the environment is production
+      abort("The Rails environment is running in production mode!") if Rails.env.production?
+      require 'rspec/rails'
+
+      Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+
+      # Checks for pending migrations and applies them before tests are run.
+      # If you are not using ActiveRecord, you can remove these lines.
+      begin
+        ActiveRecord::Migration.maintain_test_schema!
+      rescue ActiveRecord::PendingMigrationError => e
+        abort e.to_s.strip
+      end
+    RUBY
+  end
+  
+  # Adjust spec_helper.rb
+  gsub_file('spec/rails_helper.rb', 'config.use_transactional_fixtures = true', 'config.use_transactional_fixtures = false')
+
+  insert_into_file 'spec/rails_helper.rb', after: "RSpec.configure do |config|\n" do
+    <<-RUBY
+      config.include Devise::Test::ControllerHelpers, type: :controller
+      config.extend ControllerMacros, type: :controller
+    RUBY
+  end
+  
+  insert_into_file 'spec/spec_helper.rb', before: "RSpec.configure do |config|\n" do
+    <<-RUBY
+    require 'pundit/matchers'
+    require 'capybara/rspec'
+    RUBY
+  end
+  
+  # Devise helpers
+  file 'spec/support/controller_macros.rb', <<~RUBY
+  module ControllerMacros
+    def login_user
+      # Before each test, create and login the user
+      before(:each) do
+        @request.env['devise.mapping'] = Devise.mappings[:user]
+        sign_in FactoryBot.create(:user)
+      end
+    end
+  end
+  RUBY
+  
+  file 'spec/support/factory_bot.rb', <<~RUBY
+  Rpec.configure do |config|
+    config.include FactoryBot::Syntax::Methods
+  end
+  RUBY
+  
+  file 'spec/support/database_cleaner.rb', <<~RUBY
+    RSpec.configure do |config|
+      config.before(:suite) do
+        DatabaseCleaner.clean_with(:truncation)
+      end
+      
+      config.before(:each) do
+        DatabaseCleaner.strategy = :transaction
+      end
+      
+      config.before(:each, js: true) do
+        DatabaseCleaner.strategy = :transaction
+      end
+      
+      config.before(:each) do
+        DatabaseCleaner.start
+      end
+      
+      config.after(:each) do
+        DatabaseCleaner.clean
+      end
+    end
+  RUBY
+
+  # First test
+  file 'spec/features/user_visits_homepage_spec.rb', <<~RUBY
+    require "rails_helper"
+  
+    feature "User visits homepage" do
+      scenario "successfully" do
+        visit root_path
+        expect(page).to have_css 'h1', text: 'Pages#home'
+      end
+    end
+  RUBY
 end
 
 # Main setup
@@ -652,6 +755,7 @@ after_bundle do
 
   rails_command 'db:drop db:create db:migrate'
   rails_command 'generate rspec:install'
+  set_up_rspec
   
   # Commit everything to git
   unless ENV["SKIP_GIT"]
