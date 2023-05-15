@@ -633,6 +633,7 @@ def layouts
 end
 
 def set_up_rspec
+  rails_command "./bin/bundle binstubs rspec-core"
   # Make all necesarry directories
   system 'mkdir', '-p', 'spec/support'
   system 'mkdir', '-p', 'spec/features'
@@ -640,7 +641,7 @@ def set_up_rspec
   system 'mkdir', '-p', 'spec/policies'
 
   # Adjust rails_helper.rb
-  insert_into_file 'spec/rails_helper.rb', after: "# specs live under a `spec` directory, which RSpec adds to the `$LOAD_PATH`.\n" do
+  insert_into_file 'spec/rails_helper.rb', before: "RSpec.configure do |config|\n" do
     <<-RUBY
       require 'spec_helper'
       ENV['RAILS_ENV'] ||= 'test'
@@ -666,15 +667,15 @@ def set_up_rspec
 
   insert_into_file 'spec/rails_helper.rb', after: "RSpec.configure do |config|\n" do
     <<-RUBY
-      config.include Devise::Test::ControllerHelpers, type: :controller
-      config.extend ControllerMacros, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.extend ControllerMacros, type: :controller
     RUBY
   end
   
   insert_into_file 'spec/spec_helper.rb', before: "RSpec.configure do |config|\n" do
     <<-RUBY
-    require 'pundit/matchers'
-    require 'capybara/rspec'
+require 'pundit/matchers'
+require 'capybara/rspec'
     RUBY
   end
   
@@ -692,7 +693,7 @@ def set_up_rspec
   RUBY
   
   file 'spec/support/factory_bot.rb', <<~RUBY
-  Rpec.configure do |config|
+  RSpec.configure do |config|
     config.include FactoryBot::Syntax::Methods
   end
   RUBY
