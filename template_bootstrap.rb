@@ -20,10 +20,12 @@ def add_gems
   gem "dartsass-rails"
   gem "bootstrap"
   gem 'simple_form'
+
   gem_group :development, :test do
     gem "rspec-rails"
     gem "factory_bot_rails"
   end
+
   gem_group :test do
     gem 'pundit-matchers'
     gem 'capybara'
