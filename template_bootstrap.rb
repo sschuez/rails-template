@@ -633,7 +633,9 @@ def layouts
 end
 
 def set_up_rspec
-  run "bundle binstubs rspec-core"
+  # Add binstubs
+  run "./bin/bundle binstubs rspec-core"
+  
   # Make all necesarry directories
   system 'mkdir', '-p', 'spec/support'
   system 'mkdir', '-p', 'spec/features'
@@ -647,9 +649,8 @@ Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f 
     RUBY
   end
   
-  # Adjust spec_helper.rb
   gsub_file('spec/rails_helper.rb', 'config.use_transactional_fixtures = true', 'config.use_transactional_fixtures = false')
-
+  
   insert_into_file 'spec/rails_helper.rb', after: "RSpec.configure do |config|\n" do
     <<-RUBY
   config.include Devise::Test::ControllerHelpers, type: :controller
@@ -657,6 +658,7 @@ Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f 
     RUBY
   end
   
+  # Adjust spec_helper.rb
   insert_into_file 'spec/spec_helper.rb', before: "RSpec.configure do |config|\n" do
     <<-RUBY
 require 'pundit/matchers'
