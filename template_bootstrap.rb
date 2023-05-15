@@ -643,12 +643,7 @@ def set_up_rspec
   system 'mkdir', '-p', 'spec/policies'
 
   # Adjust rails_helper.rb
-  insert_into_file 'spec/rails_helper.rb', before: "RSpec.configure do |config|\n" do
-    <<-RUBY
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
-    RUBY
-  end
-  
+  gsub_file('spec/rails_helper.rb', "# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }", "Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }")
   gsub_file('spec/rails_helper.rb', 'config.use_transactional_fixtures = true', 'config.use_transactional_fixtures = false')
   
   insert_into_file 'spec/rails_helper.rb', after: "RSpec.configure do |config|\n" do
