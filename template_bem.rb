@@ -41,8 +41,8 @@ def add_authorization
 end
 
 def add_dartsass_rails
-  rails_command "./bin/bundle add dartsass-rails"
-  rails_command "./bin/rails dartsass:install"  
+  run "./bin/bundle add dartsass-rails"
+  run "./bin/rails dartsass:install"  
   run "rm app/assets/stylesheets/application.css"
   gsub_file('app/assets/stylesheets/application.scss', '// Sassy', '// Mixins
 @use "mixins/media";
