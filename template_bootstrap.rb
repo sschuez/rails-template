@@ -4,16 +4,6 @@
 # -m https://raw.githubusercontent.com/sschuez/rails-template/main/template.rb \
 # CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 
-run "if uname | grep -q 'Darwin'; then pgrep spring | xargs kill -9; fi"
-
-def rails_version
-  @rails_version ||= Gem::Version.new(Rails::VERSION::STRING)
-end
-
-def rails_6_or_newer?
-  Gem::Requirement.new(">= 6.0.0.alpha").satisfied_by? rails_version
-end
-
 def add_gems
   gem 'devise'
   gem 'pundit'
@@ -38,33 +28,6 @@ def add_users
   generate "devise:install"
   generate "devise:views"
 
-  # Configure Devise to handle TURBO_STREAM requests like HTML requests
-  inject_into_file "config/initializers/devise.rb", "  config.navigational_formats = ['/', :html, :turbo_stream]", after: "Devise.setup do |config|\n"
-  
-  inject_into_file 'config/initializers/devise.rb', after: "# frozen_string_literal: true\n" do <<~EOF
-    class TurboFailureApp < Devise::FailureApp
-      def respond
-        if request_format == :turbo_stream
-          redirect
-        else
-          super
-        end
-      end
-  
-      def skip_format?
-        %w(html turbo_stream */*).include? request_format.to_s
-      end
-    end
-  EOF
-  end
-
-  inject_into_file 'config/initializers/devise.rb', after: "# ==> Warden configuration\n" do <<-EOF
-    config.warden do |manager|
-      manager.failure_app = TurboFailureApp
-    end
-    EOF
-  end
-
   generate :devise, "User", "admin:boolean"
 
   # Set admin default to false
@@ -72,24 +35,20 @@ def add_users
     migration = Dir.glob("db/migrate/*").max_by{ |f| File.mtime(f) }
     gsub_file migration, /:admin/, ":admin, default: false"
   end
-
-  if Gem::Requirement.new("> 5.2").satisfied_by? rails_version
-    gsub_file "config/initializers/devise.rb", /  # config.secret_key = .+/, "  config.secret_key = Rails.application.credentials.secret_key_base"
-  end
 end
 
 def add_authorization
   generate 'pundit:install'
 end
 
-def add_sass
-  rails_command "css:install:sass"
-  run 'yarn build:css'
-end
+# def add_sass
+#   rails_command "css:install:sass"
+#   run 'yarn build:css'
+# end
 
 def add_dartsass_rails
-  rails_command "./bin/bundle add dartsass-rails"
-  rails_command "./bin/rails dartsass:install"  
+  run "./bin/bundle add dartsass-rails"
+  run "./bin/rails dartsass:install"  
   run "rm app/assets/stylesheets/application.css"
   gsub_file('app/assets/stylesheets/application.scss', '// Sassy', '// Mixins
 @use "mixins/media";
@@ -127,13 +86,12 @@ def add_bootstrap
 import "bootstrap"')
 end
 
-
 def add_simple_form
   generate "simple_form:install --bootstrap" 
   
   # Replace simple form initializer to work with Bootstrap 5
-  run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
-  run 'rm config/initializers/simple_form.rb'
+  # run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
+  # run 'rm config/initializers/simple_form.rb'
 end
 
 def copy_templates
@@ -143,10 +101,6 @@ def copy_templates
   run 'rm -r app/assets/stylesheets'
   run 'mv app/assets/stylesheets_bootstrap app/assets/stylesheets'
   # run 'rm -r app/assets/__MACOSX'
-end
-
-unless rails_6_or_newer?
-  puts "Please use Rails 6.0 or newer to create an application with this template"
 end
 
 def controllers
@@ -724,20 +678,16 @@ add_gems
 
 after_bundle do
   git_ignore
-
   add_users
   add_authorization
-  
   add_dartsass_rails
   add_bootstrap
   add_simple_form
   copy_templates
-  
   controllers
   layouts
-  
   set_environments
-
+  
   rails_command 'db:drop db:create db:migrate'
   rails_command 'generate rspec:install'
   set_up_rspec

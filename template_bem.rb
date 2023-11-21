@@ -122,6 +122,69 @@ def controllers
     end
   RUBY
 
+  # Errors controller
+  run 'rm public/500.html'
+  run 'rm public/404.html'
+
+  route "match '/500', via: :all, to: 'errors#internal_server_error'"
+  route "match '/404', via: :all, to: 'errors#not_found'"
+
+  application 'config.exceptions_app = self.routes'
+
+  file 'app/controllers/errors_controller.rb', <<~RUBY
+    class ErrorsController < ActionController::Base
+
+      def internal_server_error
+        render status: 500
+      end
+    
+      def not_found
+        render status: 404
+      end
+    end
+  RUBY
+  
+  file 'app/views/layouts/errors.html.erb', <<~HTML
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <script src="https://kit.fontawesome.com/649ff54fcc.js" crossorigin="anonymous"></script>
+
+        <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+        <%= javascript_importmap_tags %>
+      </head>
+
+      <body class="text-center">
+
+        <div id="flash" class="flash">
+          <%= render "shared/flash" %>
+        </div>
+
+        <div class="container">
+          <%= yield %>
+        </div>
+
+      </body>
+    </html>
+  HTML
+  
+  file 'app/views/errors/internal_server_error.html.erb', <<~HTML
+    <h1>😱 <%= response.status %> <%= action_name.humanize %> 😱</h1>
+    <br>
+    <p>Really sorry, something went wrong here 😅</p>
+    <br>
+    <%= link_to "Back to homepage", root_url, class: "my-btn my-btn--primary" %>
+  HTML
+
+  file 'app/views/errors/not_found.html.erb', <<~HTML
+    <h1>😱 <%= response.status %> <%= action_name.humanize %> 😱</h1>
+    <br>
+    <p>Sorry, this page does not exist 😅</p>
+    <br>
+    <%= link_to "Back to homepage", root_url, class: "my-btn my-btn--primary" %>
+  HTML
+
   # ApplicationHelper
   run 'rm app/helpers/application_helper.rb'
   file 'app/helpers/application_helper.rb', <<~RUBY
@@ -173,6 +236,33 @@ def git_ignore
 end
 
 def layouts
+  # Icons
+  file 'app/models/concerns/icon.rb', <<~RUBY
+  class Icon
+    def initialize(icon)
+      @icon = icon
+      @icons = {
+        trash: '<i class="bi bi-trash-fill"></i>',
+        edit: '<i class="bi bi-pencil-fill"></i>',
+        confirm: '<i class="bi bi-check-circle-fill"></i>',
+        cancel: '<i class="bi bi-x-circle-fill"></i>',
+        handle: '<i class="bi bi-grip-horizontal handle mt-xxs ml-s"></i>',
+        repeat: '<i class="bi bi-arrow-repeat"></i>',
+        hamburger: '<i class="bi bi-list hamburger"></i>',
+        close: '<i class="bi bi-x"></i>',
+        close_lg: '<i class="bi bi-x-lg"></i>',
+        sign_out: '<i class="bi bi-box-arrow-right"></i>',
+        sign_in: '<i class="bi bi-box-arrow-in-right"></i>',
+        translate: '<i class="bi bi-translate"></i>'
+      }
+    end
+  
+    def call
+      @icons[@icon.to_sym].html_safe
+    end
+  end
+  RUBY
+
   # Meta
   style = <<~HTML
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
