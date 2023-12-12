@@ -1,6 +1,7 @@
 # Command
 # rails new \
 # --database postgresql \
+# -a propshaft \
 # -m https://raw.githubusercontent.com/sschuez/rails-template/main/template.rb \
 # CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 
@@ -90,6 +91,14 @@ def add_simple_form
       b.use :input, class: "form__input", error_class: "form__input--invalid"
     end
 
+    # Custom wrapper for boolean inputs
+    config.wrappers :vertical_boolean, tag: 'div', class: 'form__group', error_class: 'error' do |b|
+      b.use :html5
+      b.use :placeholder
+      b.optional :readonly
+      b.use :label_input, class: "form__checkbox"
+    end
+
     # Default configuration
     config.generate_additional_classes_for = []
     config.default_wrapper                 = :default
@@ -118,7 +127,6 @@ def controllers
   run 'rm app/controllers/application_controller.rb'
   file 'app/controllers/application_controller.rb', <<~RUBY
     class ApplicationController < ActionController::Base
-    #{  "protect_from_forgery with: :exception\n" if Rails.version < "5.2"}  before_action :authenticate_user!
     end
   RUBY
 

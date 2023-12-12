@@ -1,6 +1,7 @@
 # Command
 # rails new \
 # --database postgresql \
+# -a propshaft \
 # -m https://raw.githubusercontent.com/sschuez/rails-template/main/template.rb \
 # CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 
@@ -8,7 +9,6 @@ def add_gems
   gem 'devise'
   gem 'pundit'
   gem "dartsass-rails"
-  # gem "bootstrap"
   gem 'simple_form'
 
   gem_group :development, :test do
@@ -41,11 +41,6 @@ def add_authorization
   generate 'pundit:install'
 end
 
-# def add_sass
-#   rails_command "css:install:sass"
-#   run 'yarn build:css'
-# end
-
 def add_dartsass_rails
   run "./bin/bundle add dartsass-rails"
   run "./bin/rails dartsass:install"  
@@ -76,7 +71,7 @@ def add_dartsass_rails
 @use "utilities/margins";
 
 // External Libraries
-@import "bootstrap";
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css");
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");')
 end
 
