@@ -4,6 +4,7 @@ Project with devise, user model (email, admin:boolean) and bootstrap preconfigur
 rails new \
 --skip-test \
 --database postgresql \
+-a propshaft \
 -m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bootstrap.rb \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
@@ -39,6 +40,7 @@ Project with devise, user model (email, admin:boolean) preconfigrued with BEM CS
 rails new \
 --skip-test \
 --database postgresql \
+-a propshaft \
 -m https://raw.githubusercontent.com/sschuez/rails-template/main/template_bem.rb \
 CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
