@@ -8,7 +8,7 @@ def add_gems
   gem 'devise'
   gem 'pundit'
   gem "dartsass-rails"
-  gem "bootstrap"
+  # gem "bootstrap"
   gem 'simple_form'
 
   gem_group :development, :test do
