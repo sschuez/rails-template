@@ -64,6 +64,7 @@ def add_dartsass_rails
 @use "components/visually_hidden";
 
 // Layouts
+@use "layouts/bootstrap";
 @use "layouts/container";
 @use "layouts/header";
 
